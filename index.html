@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <link rel="icon" href="data:,">
-  <title>智印 QPrint - QwejayHuang</title>
+  <title>智印 QPrint</title>
   <style>
     :root {
       --accent: #2563eb;
@@ -998,21 +998,18 @@ const app = {
   },
 
   getResourceUrls(localPath) {
-    if (!localPath || localPath.startsWith('data:') || localPath.startsWith('blob:')) return [localPath];
-    
-    if (localPath.startsWith('fonts/')) {
-      return [localPath];
-    }
+    if (!localPath || localPath.startsWith('data:') || localPath.startsWith('blob:') || localPath.startsWith('http')) return [localPath];
 
     const urls = [];
+    // 1. 首选方案：尝试从配置的 CDN / COS 加速桶拉取
     COS_BASE_URLS.forEach(baseUrl => {
       const cleanBase = baseUrl.replace(/\/$/, '');
       if (cleanBase) urls.push(cleanBase + '/' + localPath);
     });
+    // 2. 终极保底机制：如果在 COS 找不到或桶已失效，降级使用程序本地的同名文件
     urls.push(localPath); 
     return urls;
   },
-
 
   handleKeys(e) {
     if (e.target.isContentEditable || e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT' || this.state.editingId) return;
@@ -2122,7 +2119,32 @@ const app = {
     if (!this.dom.paper) return; 
     const bg = this.state.bg || 'bg/10.jpg';
     const urls = this.getResourceUrls(bg);
-    this.dom.paper.style.backgroundImage = "url('" + urls[0] + "')";
+    
+    if (bg.startsWith('data:') || bg.startsWith('blob:')) {
+      this.dom.paper.style.backgroundImage = "url('" + bg + "')";
+      return;
+    }
+
+    let attempt = 0;
+    const tryLoad = () => {
+      if (attempt >= urls.length) {
+        this.dom.paper.style.backgroundImage = "none";
+        return;
+      }
+      const img = new Image();
+      img.onload = () => {
+        // 确保图片加载完后，用户没有切换到其他背景
+        if (this.state.bg === bg) {
+          this.dom.paper.style.backgroundImage = "url('" + urls[attempt] + "')";
+        }
+      };
+      img.onerror = () => {
+        attempt++;
+        tryLoad();
+      };
+      img.src = urls[attempt];
+    };
+    tryLoad();
   },
 
   uploadBg(i) {
