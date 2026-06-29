@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <link rel="icon" href="data:,">
+  <link class="icon" rel="icon" href="data:,">
   <title>智印 QPrint</title>
   <style>
     :root {
@@ -12,9 +12,9 @@
       --accent-soft: rgba(37, 99, 235, 0.08);
       --bg-page: #f1f5f9;
       --bg-side: #ffffff;
-      --border: #e2e8f0;
+      --border: #cbd5e1; /* 提升边框对比度 */
       --text-main: #0f172a;
-      --text-muted: #64748b;
+      --text-muted: #475569; /* 加深辅助文字以便阅读 */
       --radius: 14px;
       --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
       --danger: #ef4444;
@@ -25,22 +25,22 @@
     .spinner { width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid var(--accent); border-radius: 50%; animation: spin 1s linear infinite; }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-    #toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.85); color: white; padding: 10px 24px; border-radius: 50px; font-size: 13px; z-index: 100000; display: none; transition: opacity 0.3s; white-space: nowrap; box-shadow: 0 4px 12px rgba(0,0,0,0.15); pointer-events: none; }
+    #toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.9); color: white; padding: 12px 28px; border-radius: 50px; font-size: 14px; z-index: 100000; display: none; transition: opacity 0.3s; white-space: nowrap; box-shadow: 0 4px 12px rgba(0,0,0,0.2); pointer-events: none; font-weight: bold; }
 
     * { box-sizing: border-box; outline: none; -webkit-font-smoothing: antialiased; -webkit-tap-highlight-color: transparent; }
     body { margin: 0; font-family: "Segoe UI", "SF Pro Display", "Microsoft YaHei", sans-serif; background: var(--bg-page); color: var(--text-main); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
 
-    header { height: 60px; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 16px; z-index: 800; flex-shrink: 0; }
+    header { height: 65px; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 16px; z-index: 800; flex-shrink: 0; }
     .logo-box { display: flex; align-items: center; gap: 8px; }
-    .logo-icon { width: 32px; height: 32px; background: linear-gradient(135deg, var(--accent), #3b82f6); border-radius: 9px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 900; font-size: 18px; }
-    .logo-text { font-weight: 800; font-size: 16px; letter-spacing: -0.5px; }
-    .logo-ver { font-size: 10px; color: var(--text-muted); font-weight: 600; padding-top: 4px; }
+    .logo-icon { width: 34px; height: 32px; background: linear-gradient(135deg, var(--accent), #3b82f6); border-radius: 9px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 900; font-size: 18px; }
+    .logo-text { font-weight: 900; font-size: 18px; letter-spacing: -0.5px; }
+    .logo-ver { font-size: 11px; color: var(--text-muted); font-weight: 700; padding-top: 4px; }
 
     .main { flex: 1; display: flex; overflow: hidden; position: relative; }
     
     .sidebar { 
-      width: 330px; 
-      max-width: 330px;
+      width: 340px; 
+      max-width: 340px;
       background: var(--bg-side); 
       border-right: 1px solid var(--border); 
       display: flex; 
@@ -53,9 +53,10 @@
     }
     .sidebar.right { border-right: none; border-left: 1px solid var(--border); }
 
-    .tab-nav { display: flex; padding: 5px; background: #f1f5f9; margin: 15px 15px 10px 15px; border-radius: 12px; align-items: center; justify-content: space-between; }
-    .tab-btn { flex: 1; padding: 10px; text-align: center; font-size: 12px; font-weight: 700; color: var(--text-muted); cursor: pointer; border-radius: 9px; border: none; background: transparent; transition: 0.2s; }
-    .tab-btn.active { background: white; color: var(--accent); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+    /* 无障碍选项卡设置 */
+    .tab-nav { display: flex; padding: 6px; background: #f1f5f9; margin: 15px 15px 10px 15px; border-radius: 14px; align-items: center; justify-content: space-between; }
+    .tab-btn { flex: 1; padding: 12px; text-align: center; font-size: 14px; font-weight: 800; color: var(--text-muted); cursor: pointer; border-radius: 10px; border: none; background: transparent; transition: 0.2s; }
+    .tab-btn.active { background: white; color: var(--accent); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
     .tab-content { flex: 1; overflow-y: auto; overflow-x: hidden; display: none; }
     .tab-content.active { display: block; }
 
@@ -74,22 +75,51 @@
     .el-img img { width: 100%; height: 100%; pointer-events: none; }
     .resize-handle { position: absolute; width: 14px; height: 14px; background: white; border: 3px solid var(--accent); border-radius: 50%; bottom: -7px; right: -7px; cursor: nwse-resize; z-index: 200; touch-action: none; }
 
-    .panel-section { margin: 0 15px 15px; padding: 16px; background: white; border: 1px solid var(--border); border-radius: var(--radius); }
-    .section-header { font-size: 11px; font-weight: 800; color: var(--text-muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; justify-content: space-between; }
+    .panel-section { margin: 0 15px 15px; padding: 16px; background: white; border: 1.5px solid var(--border); border-radius: var(--radius); }
+    .section-header { font-size: 12px; font-weight: 900; color: var(--text-main); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; justify-content: space-between; }
 
-    .btn { padding: 8px 14px; border: 1px solid var(--border); background: white; border-radius: 10px; cursor: pointer; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; transition: 0.2s; }
-    .btn:hover { border-color: var(--accent); color: var(--accent); }
+    /* 全局无障碍大字体按钮 */
+    .btn { 
+      padding: 10px 18px; 
+      border: 1.5px solid var(--border); 
+      background: white; 
+      border-radius: 12px; 
+      cursor: pointer; 
+      font-size: 15px; 
+      font-weight: 700; 
+      display: inline-flex; 
+      align-items: center; 
+      gap: 8px; 
+      transition: 0.2s; 
+    }
+    .btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
     .btn.primary { background: var(--accent); color: white; border-color: var(--accent); }
     .btn.primary:hover { background: var(--accent-hover); }
-    .btn.sm { padding: 6px 10px; font-size: 11px; border-radius: 8px; }
+    
+    .btn.sm { 
+      padding: 9px 14px; 
+      font-size: 14px; 
+      border-radius: 10px; 
+    }
 
-    .check-toggle { display: flex; align-items: center; gap: 15px; margin-bottom: 12px; padding: 10px; background: #f8fafc; border-radius: 10px; border: 1px solid var(--border); }
-    .check-item { display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 12px; font-weight: 700; color: var(--text-muted); }
-    .check-item input { width: 16px; height: 16px; cursor: pointer; accent-color: var(--accent); }
+    /* 所有侧边栏输入与下拉控件无障碍放大 */
+    select, input[type="number"], input[type="text"], input[type="color"], textarea {
+      font-size: 15px !important; 
+      padding: 10px !important; 
+      border-radius: 10px !important;
+      border: 1.5px solid var(--border) !important;
+    }
+    select:hover, input:hover, textarea:hover {
+      border-color: var(--accent) !important;
+    }
 
-    .sheet-wrap { overflow: auto; border: 1px solid var(--border); border-radius: 10px; background: #ffffff; max-height: 260px; }
-    .data-table { border-collapse: collapse; width: 100%; font-size: 11px; }
-    .data-table th, .data-table td { border-bottom: 1px solid var(--border); padding: 8px 10px; text-align: left; position: relative; }
+    .check-toggle { display: flex; align-items: center; gap: 15px; margin-bottom: 12px; padding: 12px; background: #f8fafc; border-radius: 12px; border: 1.5px solid var(--border); }
+    .check-item { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 14px; font-weight: 800; color: var(--text-main); }
+    .check-item input { width: 20px; height: 20px; cursor: pointer; accent-color: var(--accent); }
+
+    .sheet-wrap { overflow: auto; border: 1.5px solid var(--border); border-radius: 10px; background: #ffffff; max-height: 260px; }
+    .data-table { border-collapse: collapse; width: 100%; font-size: 12px; }
+    .data-table th, .data-table td { border-bottom: 1.5px solid var(--border); padding: 10px 12px; text-align: left; position: relative; }
     .data-table td[contenteditable="true"] { cursor: text; transition: 0.2s; border-radius: 4px; }
     .data-table td[contenteditable="true"]:hover { background: rgba(37,99,235,0.05); box-shadow: inset 0 0 0 1px #cbd5e1; }
     .data-table td[contenteditable="true"]:focus { background: #fff; box-shadow: inset 0 0 0 2px var(--accent); z-index: 10; }
@@ -100,25 +130,26 @@
     .col-del-btn svg { width: 10px; height: 10px; fill: #ef4444; }
     .col-del-btn:hover svg { fill: #fff; }
     .data-table tr.selected td { background: var(--accent-soft) !important; }
-    .close-btn { background: none; border: none; font-size: 18px; cursor: pointer; color: #999; padding: 0 4px; line-height: 1; }
+    .close-btn { background: none; border: none; font-size: 20px; cursor: pointer; color: #999; padding: 0 4px; line-height: 1; }
     .close-btn:hover { color: var(--danger); }
 
+    /* 悬浮操作工具栏无障碍设计 */
     .floating-bar { 
       position: absolute; 
       bottom: max(35px, calc(25px + env(safe-area-inset-bottom))); 
       left: 50%; 
       transform: translateX(-50%); 
-      background: rgba(255, 255, 255, 0.9); 
+      background: rgba(255, 255, 255, 0.92); 
       backdrop-filter: blur(12px); 
       -webkit-backdrop-filter: blur(12px); 
-      padding: 6px 16px; 
+      padding: 8px 20px; 
       border-radius: 50px; 
       display: flex; 
-      gap: 12px; 
+      gap: 14px; 
       align-items: center; 
       box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.05); 
       z-index: 900; 
-      border: 1px solid rgba(255, 255, 255, 0.7); 
+      border: 1.5px solid rgba(255, 255, 255, 0.8); 
       max-width: 95%; 
       flex-wrap: nowrap; 
       overflow-x: auto;
@@ -127,17 +158,17 @@
     .floating-bar::-webkit-scrollbar { display: none; }
 
     .floating-bar .btn.sm {
-      height: 28px;
-      padding: 0 12px;
+      height: 42px; 
+      padding: 0 20px; 
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      border-radius: 14px;
-      border: 1px solid var(--border);
+      border-radius: 21px;
+      border: 1.5px solid var(--border);
       background: #ffffff;
       color: var(--text-main);
-      font-size: 11px;
-      font-weight: bold;
+      font-size: 15px; 
+      font-weight: 800;
       transition: all 0.2s ease;
       white-space: nowrap;
       flex-shrink: 0;
@@ -149,7 +180,7 @@
     }
 
     .floating-bar .btn.sm.zoom-btn {
-      width: 28px;
+      width: 42px; 
       padding: 0;
       border-radius: 50%;
       flex-shrink: 0;
@@ -158,12 +189,11 @@
     .tool-btn {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 6px 14px;
-      border-radius: 20px;
-      border: 1.5px solid transparent;
-      font-size: 12px;
-      font-weight: 700;
+      gap: 8px;
+      padding: 10px 22px; 
+      border-radius: 25px;
+      font-size: 15px; 
+      font-weight: 900;
       cursor: pointer;
       transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
       user-select: none;
@@ -174,7 +204,7 @@
     .tool-btn.text-tool {
       background: var(--accent-soft);
       color: var(--accent);
-      border-color: rgba(37, 99, 235, 0.12);
+      border-color: rgba(37, 99, 235, 0.2);
     }
     .tool-btn.text-tool:hover {
       background: var(--accent);
@@ -194,16 +224,16 @@
     }
 
     .tool-btn:active { transform: scale(0.95); }
-    .tool-btn svg { width: 14px; height: 14px; fill: currentColor; }
+    .tool-btn svg { width: 18px; height: 18px; fill: currentColor; }
 
-    #contextMenu { position: fixed; z-index: 10000; background: white; border: 1px solid var(--border); border-radius: 10px; box-shadow: var(--shadow-lg); padding: 6px 0; min-width: 150px; display: none; }
-    #contextMenu .menu-item { padding: 9px 16px; cursor: pointer; font-size: 12px; font-weight: 600; color: var(--text-main); transition: 0.15s; }
+    #contextMenu { position: fixed; z-index: 10000; background: white; border: 1.5px solid var(--border); border-radius: 12px; box-shadow: var(--shadow-lg); padding: 8px 0; min-width: 170px; display: none; }
+    #contextMenu .menu-item { padding: 12px 20px; cursor: pointer; font-size: 14px; font-weight: 700; color: var(--text-main); transition: 0.15s; }
     #contextMenu .menu-item:hover { background: #f1f5f9; color: var(--accent); }
     #contextMenu .menu-item.danger:hover { background: #fef2f2; color: var(--danger); }
 
     #customSizeWrap { display: none; margin-top: 8px; gap: 8px; align-items: center; }
     #customSizeWrap.show { display: flex; }
-    #customSizeWrap input { width: 100%; padding: 6px 8px; border: 1px solid #ddd; border-radius: 6px; font-size: 12px; }
+    #customSizeWrap input { width: 100%; padding: 8px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 14px; }
 
     .sidebar-overlay { 
       position: fixed; 
@@ -262,7 +292,7 @@
     .drop-zone { 
       border: 2px dashed #cbd5e1; 
       border-radius: 12px; 
-      padding: 16px 10px; 
+      padding: 18px 10px; 
       text-align: center; 
       cursor: pointer; 
       transition: 0.2s; 
@@ -272,17 +302,17 @@
     .drop-zone:hover { border-color: var(--accent); background: var(--accent-soft); }
     .drop-zone.drag { border-color: var(--accent); background: var(--accent-soft); transform: scale(1.01); }
     .drop-zone .dz-icon { 
-      font-size: 20px; 
+      font-size: 24px; 
       margin-bottom: 4px; 
     }
     .drop-zone .dz-title { 
-      font-size: 11px; 
+      font-size: 12px; 
       font-weight: 700; 
       color: var(--text-main); 
       margin-bottom: 2px; 
     }
     .drop-zone .dz-sub { 
-      font-size: 9px; 
+      font-size: 10px; 
       color: var(--text-muted); 
     }
 
@@ -366,37 +396,60 @@
       .sidebar.right { transform: translate3d(100%, 0, 0); }
 
       .floating-bar {
-        padding: 4px 10px;
-        gap: 6px;
+        padding: 6px 12px;
+        gap: 8px;
         bottom: max(35px, calc(20px + env(safe-area-inset-bottom)));
       }
       .floating-bar .btn.sm {
-        height: 26px;
-        padding: 0 6px;
-        font-size: 10px;
+        height: 38px; 
+        padding: 0 14px; 
+        font-size: 14px;
       }
       .floating-bar .btn.sm.zoom-btn {
-        width: 26px;
-        padding: 0;
+        width: 38px;
+        height: 38px;
       }
       .tool-btn {
-        padding: 5px 10px;
-        font-size: 11px;
-        gap: 4px;
+        padding: 8px 16px; 
+        font-size: 14px;
+        gap: 6px;
       }
       .tool-btn svg {
-        width: 12px;
-        height: 12px;
+        width: 14px;
+        height: 14px;
       }
     }
 
+    /* 照片配对状态提示样式：缩小提示文字字号，并加上高对比底色 */
+    .match-status {
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 13px !important; 
+      line-height: 1.5;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      font-weight: bold;
+    }
+    .match-status.ok {
+      background: #f0fdf4 !important;
+      border: 1.5px solid #bbf7d0 !important;
+      color: #166534 !important;
+    }
+    .match-status.warn {
+      background: #fffbeb !important;
+      border: 1.5px solid #fef08a !important;
+      color: #854d0e !important;
+    }
+
+    /* 物理打印核心配置： display:none 完美杜绝闪屏， width: max-content 杜绝强制折行 */
+    #printZone { display: none; }
     @media print {
       html, body { margin: 0 !important; padding: 0 !important; width: 100% !important; height: 100% !important; overflow: hidden !important; background: #fff !important; }
       body > *:not(#printZone) { display: none !important; }
       #printZone { display: block !important; position: absolute; top: 0; left: 0; width: 100% !important; height: 100% !important; z-index: 99999; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
       .print-page { position: relative; page-break-after: always; page-break-inside: avoid; overflow: hidden; left: 0; top: 0; margin: 0 !important; border: none !important; box-shadow: none !important; }
-      .print-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
-      .print-el { position: absolute; z-index: 1; white-space: pre-wrap; word-break: break-all; }
+      .print-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; object-fit: cover; }
+      .print-el { position: absolute; z-index: 1; white-space: pre-wrap; word-break: break-all; width: max-content; }
       .print-img { position: absolute; z-index: 1; overflow: hidden; }
       .print-img img { width: 100%; height: 100%; }
     }
@@ -465,7 +518,7 @@
           <summary>💡操作指南</summary>
           <ol>
             <li>在下方<b>“模板库”</b>选择模板样式</li>
-            <li>切到<b>“学生名单”</b>卡片，导入名单 Excel 表格</li>
+            <li>切到<b>“名单导入”</b>卡片，导入名单 Excel 表格</li>
             <li>变量请用双花括号包围，如：<code style="background:#fff;padding:2px;border:1px solid #ccc;border-radius:4px;">{{姓名}}</code></li>
             <li>确认无误后，点击右上角<b>“批量打印”</b></li>
           </ol>
@@ -482,6 +535,8 @@
         <button class="btn sm" style="width:100%; margin-top:15px; font-size:12px;" onclick="document.getElementById('bgIn').click()">🖼️ 上传我的背景图</button>
         <input type="file" id="bgIn" hidden accept="image/*" onchange="app.uploadBg(this)">
       </div>
+      
+      <!-- 纸张尺寸 -->
       <div class="panel-section">
         <div class="section-header">纸张尺寸 (单位: 毫米)</div>
         <select id="paperPreset" onchange="app.onPresetChange()" style="width:100%; padding:8px; border:1px solid #ddd; border-radius:8px; font-size:13px; margin-bottom:6px;">
@@ -500,6 +555,32 @@
           <input type="number" id="inH" onchange="app.onCustomSizeChange()" placeholder="高度(mm)">
         </div>
       </div>
+
+      <!-- 拼版打印配置（一页多张） -->
+      <div class="panel-section">
+        <div class="section-header">🖨️ 拼版排版 (一页多张)</div>
+        <select id="printLayoutMode" onchange="app.onPrintLayoutModeChange()" style="width:100%; padding:8px; border:1px solid #ddd; border-radius:8px; font-size:13px; margin-bottom:8px;">
+          <option value="single" checked>单张独立排版 (一页一张)</option>
+          <option value="grid">多张拼版印刷 (省纸/一页多张)</option>
+        </select>
+        <div id="gridSettingsWrap" style="display:none; flex-direction:column; gap:8px;">
+          <div style="display:flex; gap:8px; align-items:center;">
+            <span style="font-size:12px; color:var(--text-muted); min-width:40px;">行数:</span>
+            <input type="number" id="gridRows" value="2" min="1" max="10" style="width:100%; padding:6px; border:1px solid #ddd; border-radius:6px; font-size:12px;">
+            <span style="font-size:12px; color:var(--text-muted); min-width:40px;">列数:</span>
+            <input type="number" id="gridCols" value="2" min="1" max="10" style="width:100%; padding:6px; border:1px solid #ddd; border-radius:6px; font-size:12px;">
+          </div>
+          <select id="gridTargetPaper" style="width:100%; padding:8px; border:1px solid #ddd; border-radius:8px; font-size:13px;">
+            <option value="297,210">打印输出纸张: A4 横向 (297×210 mm)</option>
+            <option value="210,297">打印输出纸张: A4 竖向 (210×297 mm)</option>
+            <option value="420,297">打印输出纸张: A3 横向 (420×297 mm)</option>
+          </select>
+          <label class="check-item" style="padding:4px 0; margin-bottom:0; background:none; border:none; display:flex; align-items:center;">
+            <input type="checkbox" id="gridCutLines" checked style="width:15px; height:15px;"> 开启虚线裁剪线 (方便切开)
+          </label>
+        </div>
+      </div>
+
       <div class="panel-section">
         <div class="section-header">字体管理</div>
         <button class="btn sm" style="width:100%;" onclick="document.getElementById('fontFile').click()">📁 加载我的本地字体</button>
@@ -508,7 +589,7 @@
       </div>
     </div>
 
-    <!-- 学生名单栏目 -->
+    <!-- 数据名单导入 -->
     <div id="tab-data" class="tab-content">
       <div style="padding:0 15px 20px;">
         <div class="section-header">常用助手</div>
@@ -528,7 +609,7 @@
           <input type="file" id="excelIn" hidden accept=".xlsx,.xls,.csv" onchange="app.importExcel(this)">
         </div>
         <div class="section-header">
-          学生名单列表预览
+          名单列表预览
           <button class="btn sm" style="padding:2px 8px; color:var(--danger); border:none;" onclick="app.clearAllData()">🗑️ 清空</button>
         </div>
         <div class="sheet-wrap">
@@ -614,7 +695,6 @@
     <nav class="tab-nav">
       <button class="tab-btn active" id="tabRStyle" onclick="app.switchTab('right','style')">外观属性</button>
       <button class="tab-btn" id="tabRLayers" onclick="app.switchTab('right','layers')">页面内容列表</button>
-      <!-- 手机端专属快速关闭键 -->
       <button class="btn sm show-on-mobile" onclick="app.closeSidebars()" style="border:none;background:transparent;font-size:18px;color:var(--text-muted);padding:0 8px;">✕</button>
     </nav>
 
@@ -634,7 +714,7 @@
           <select id="propImgVar" onchange="app.updateActive()" style="width:100%; padding:8px; border:1px solid #ddd; border-radius:8px; font-size:13px; margin-bottom:8px;"></select>
           <input type="text" id="propImgVarText" oninput="app.updateActive()" placeholder="或者手动输入列名" style="width:100%; padding:8px; border:1px solid #ddd; border-radius:8px; font-size:13px; margin-bottom:10px;">
           
-          <button class="btn sm" style="width:100%; margin:8px 0 12px; background:#eff6ff; color:#1e40af; border-color:#bfdbfe;" onclick="app.setupQRCode()">✨ 生成学生专属二维码</button>
+          <button class="btn sm" style="width:100%; margin:8px 0 12px; background:#eff6ff; color:#1e40af; border-color:#bfdbfe;" onclick="app.setupQRCode()">✨ 生成专属二维码</button>
 
           <div id="imgVarHint" style="font-size:11px; color:#666; margin-bottom:12px; line-height:1.5;"></div>
 
@@ -668,13 +748,13 @@
             <option value="Times New Roman" style="font-family: 'Times New Roman';">Times New Roman</option>
           </select>
           <div style="display:flex; align-items:center; gap:12px;">
-            <div style="width:44px; height:44px; border-radius:12px; border:3px solid white; box-shadow:0 0 0 1px #ddd; position:relative; overflow:hidden; background:#000" id="colorPreview">
+            <div style="width:50px; height:50px; border-radius:12px; border:3px solid white; box-shadow:0 0 0 1.5px var(--border); position:relative; overflow:hidden; background:#000" id="colorPreview">
               <input type="color" id="propColor" oninput="app.updateActive()" style="position:absolute; top:-10px; left:-10px; width:100px; height:100px; cursor:pointer">
             </div>
-            <input type="text" id="colorHex" style="width:90px; border:none; font-size:12px; font-weight:800; color:var(--text-muted)" readonly>
+            <input type="text" id="colorHex" style="width:100px; border:none; font-size:14px; font-weight:800; color:var(--text-muted)" readonly>
           </div>
           <div style="display:flex; gap:10px; margin-top:12px">
-            <input type="number" id="propSize" oninput="app.updateActive()" style="width:70px; padding:8px; border:1px solid #ddd; border-radius:8px" title="字号大小">
+            <input type="number" id="propSize" oninput="app.updateActive()" style="width:85px; padding:10px; border:1px solid #ddd; border-radius:10px" title="字号大小">
             <button class="btn sm" onclick="app.toggleBold()"><b>加粗 B</b></button>
             <button id="italicBtn" class="btn sm" onclick="app.toggleItalic()"><i>斜体 I</i></button>
             <button id="underlineBtn" class="btn sm" onclick="app.toggleUnderline()"><u>下划线 U</u></button>
@@ -682,28 +762,28 @@
 
           <div style="display:flex; gap:10px; margin-top:12px">
             <div style="flex:1">
-              <label style="font-size:10px;color:var(--text-muted);display:block;margin-bottom:4px;">字距 (px)</label>
-              <input type="number" id="propLetterSpacing" oninput="app.updateActive()" style="width:100%; padding:6px; border:1px solid #ddd; border-radius:8px; font-size:12px;" value="0">
+              <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;font-weight:700;">字距 (px)</label>
+              <input type="number" id="propLetterSpacing" oninput="app.updateActive()" style="width:100%; padding:10px; border:1.5px solid var(--border); border-radius:10px; font-size:14px;" value="0">
             </div>
             <div style="flex:1">
-              <label style="font-size:10px;color:var(--text-muted);display:block;margin-bottom:4px;">行高 (倍)</label>
-              <input type="number" step="0.1" id="propLineHeight" oninput="app.updateActive()" style="width:100%; padding:6px; border:1px solid #ddd; border-radius:8px; font-size:12px;" value="1.4">
+              <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;font-weight:700;">行高 (倍)</label>
+              <input type="number" step="0.1" id="propLineHeight" oninput="app.updateActive()" style="width:100%; padding:10px; border:1.5px solid var(--border); border-radius:10px; font-size:14px;" value="1.4">
             </div>
           </div>
           
-          <div style="display:flex; gap:10px; margin-top:12px">
+          <div style="display:flex; gap:10px; margin-top:15px">
             <button class="btn sm" style="flex:1" onclick="app.setTextAlign('left')">左靠齐</button>
-            <button class="btn sm" style="flex:1" onclick="app.setTextAlign('center')">居中对齐</button>
+            <button class="btn sm" style="flex:1" onclick="app.setTextAlign('center')">居中</button>
             <button class="btn sm" style="flex:1" onclick="app.setTextAlign('right')">右靠齐</button>
           </div>
 
-          <div id="centerTools" style="margin-top:16px; padding-top:12px; border-top:1px dashed #e2e8f0;">
-            <div style="font-size:11px; font-weight:800; color:var(--text-muted); margin-bottom:8px; text-transform:uppercase;">📐 纸张快速对齐</div>
+          <div id="centerTools" style="margin-top:16px; padding-top:15px; border-top:1px dashed #cbd5e1;">
+            <div style="font-size:12px; font-weight:900; color:var(--text-muted); margin-bottom:8px; text-transform:uppercase;">📐 纸张快速对齐</div>
             <div style="display:flex; gap:8px;">
               <button class="btn sm" style="flex:1; background:#f0fdf4; border-color:#bbf7d0; color:#166534;" onclick="app.alignToPaper('h')">↕ 水平居中</button>
               <button class="btn sm" style="flex:1; background:#f0fdf4; border-color:#bbf7d0; color:#166534;" onclick="app.alignToPaper('v')">↔ 垂直居中</button>
             </div>
-            <div style="font-size:10px; color:#5e646d; margin-top:6px; line-height:1.4;">提示：水平居中会自动将选中的文字设定为“居中对齐”，这样即使学生的名字长短不同，排版也不会乱。</div>
+            <div style="font-size:11px; color:#475569; margin-top:8px; line-height:1.5;">提示：水平居中会自动将选中的文字设定为“居中对齐”，这样即使姓名等长短不同，排版也不会乱。</div>
           </div>
         </div>
 
@@ -717,9 +797,9 @@
           </div>
         </div>
 
-        <div style="padding:0 15px"><button class="btn sm" style="width:100%; color:var(--danger); border-color:#fee2e2" onclick="app.delActive()">🗑️ 彻底删除所选中的内容</button></div>
+        <div style="padding:0 15px"><button class="btn sm" style="width:100%; color:var(--danger); border-color:#fee2e2; padding:12px;" onclick="app.delActive()">🗑️ 彻底删除所选中的内容</button></div>
       </div>
-      <div id="emptyStyle" style="padding:100px 30px; text-align:center; color:var(--text-muted); font-size:13px">点击画布里的文字或图片进行排版设置<br><br>按住键盘 Ctrl 键可鼠标多选多个元素</div>
+      <div id="emptyStyle" style="padding:100px 30px; text-align:center; color:var(--text-muted); font-size:14px; font-weight:bold; line-height:1.6;">点击画布里的文字或图片进行排版设置<br><br>按住键盘 Ctrl 键可鼠标多选多个元素</div>
     </div>
 
     <div id="tab-layers" class="tab-content">
@@ -746,6 +826,7 @@ const PRESET_BG_COUNT = 11;
 const PAPER_PRESETS = { '297,210': 1, '210,297': 1, '420,297': 1, '210,148': 1, '250,176': 1, '279,216': 1 };
 
 const COS_BASE_URLS = [
+   "https://cos.qwejay.cn/smartprint/",
    "https://cos.qwejay.cn/QPrint/",
 ];
 
@@ -754,25 +835,25 @@ const PRESET_FONTS = [
   { name: "仿宋_GB2312", family: "FangSong_GB2312", path: "fonts/仿宋_GB2312.ttf" }
 ];
 
+// 已替换并保存为您要求的最新三大标准预设模板数据
 const TEMPLATES = [
   {
     name: "毕业证书",
     bgPath: "bg/10.jpg",
-    state: {"w":297,"h":210,"bg":"bg/10.jpg","elements":[{"id":2,"type":"image","imgVar":"姓名","x":51.51,"y":110.15,"imgW":52.18,"imgH":71.65,"imgFit":"cover","visible":true},{"id":3,"type":"text","text":"{{姓名}}小朋友：","x":92,"y":80.6,"font":"KaiTi","size":24,"color":"#000000","bold":true,"italic":false,"underline":false,"align":"left","visible":true}],"data":{"headers":["姓名"],"rows":[["欧洛伦"],["迪奥娜"],["可莉"],["雷泽"]]},"activeIds":[],"editingId":null,"scale":0.9,"panX":120.8,"panY":69.7,"curIdx":1}
+    state: {"w":297,"h":210,"bg":"bg/10.jpg","elements":[{"id":2,"type":"image","imgVar":"姓名","x":52.1,"y":110.49,"imgW":55.3,"imgH":83.7,"imgFit":"cover","visible":true},{"id":3,"type":"text","text":"{{姓名}}小朋友：","x":92.6,"y":80.3,"font":"SimHei","size":24,"color":"#000000","bold":true,"italic":false,"underline":false,"align":"left","visible":true}],"data":{"headers":["姓名"],"rows":[["欧洛伦"],["迪奥娜"],["可莉"],["雷泽"]]},"activeIds":[],"editingId":null,"scale":0.9,"panX":120.8,"panY":69.7,"curIdx":1}
   },
   {
     name: "运动会奖状",
     bgPath: "bg/2.jpg",
-    state: {"w":297,"h":210,"scale":0.7,"panX":0,"panY":0,"bg":"bg/2.jpg","customBgs":[],"activeIds":[],"editingId":null,"elements":[{"id":1,"type":"text","text":"荣誉证书","x":148.5,"y":45,"font":"SimHei","size":55,"color":"#d9001b","bold":true,"italic":false,"underline":false,"align":"center","visible":true},{"id":2,"type":"text","text":"{{姓名}}小朋友：","x":48,"y":77.4,"font":"SimSun","size":22,"color":"#000000","bold":false,"italic":false,"underline":false,"align":"left","visible":true},{"id":3,"type":"text","text":"    在青葵幼儿园“萌动新春，赛场奔腾”运动会中\n表现突出，荣获：","x":48,"y":106.5,"font":"SimSun","size":24,"color":"#000000","bold":false,"italic":false,"underline":false,"align":"left","visible":true},{"id":4,"type":"text","text":"{{奖项}}","x":148.5,"y":133.4,"font":"SimHei","size":36,"color":"#000000","bold":true,"italic":false,"underline":false,"align":"center","visible":true},{"id":5,"type":"text","text":"{{获奖日期}}","x":232.2,"y":183.6,"font":"SimSun","size":20,"color":"#000000","bold":false,"italic":false,"underline":false,"align":"right","visible":true},{"id":6,"type":"text","text":"{{落款单位}}","x":262.1,"y":171.4,"font":"SimSun","size":20,"color":"#000000","bold":false,"italic":false,"underline":false,"align":"right","visible":true}],"data":{"headers":["班级","姓名","奖项","获奖日期","落款单位","其他1","其他2","其他3","其他4","其他5"],"rows":[["大一班","欧洛伦","立定跳远第一名","2026年5月","佛山市顺德区大良街道青葵幼儿园","","","","",""],["三年级(2)班","雷泽","最佳球手","2026年5月","YC小学","","","","",""]]}}
+    state: {"w":297,"h":210,"scale":0.7,"panX":0,"panY":0,"bg":"bg/2.jpg","customBgs":[],"activeIds":[],"editingId":null,"elements":[{"id":1,"type":"text","text":"荣誉证书","x":148.5,"y":45,"font":"SimHei","size":55,"color":"#d9001b","bold":true,"italic":false,"underline":false,"align":"center","visible":true},{"id":2,"type":"text","text":"{{姓名}}小朋友：","x":48,"y":77.4,"font":"SimSun","size":22,"color":"#000000","bold":false,"italic":false,"underline":false,"align":"left","visible":true},{"id":3,"type":"text","text":"    在青葵幼儿园“萌动新春，赛场奔腾”运动会中\n表现突出，荣获：","x":48,"y":106.5,"font":"SimSun","size":24,"color":"#000000","bold":false,"italic":false,"underline":false,"align":"left","visible":true},{"id":4,"type":"text","text":"{{奖项}}","x":148.5,"y":133.4,"font":"SimHei","size":36,"color":"#000000","bold":true,"italic":false,"underline":false,"align":"center","visible":true},{"id":5,"type":"text","text":"{{获奖日期}}","x":232.2,"y":183.6,"font":"SimSun","size":20,"color":"#000000","bold":false,"italic":false,"underline":false,"align":"right","visible":true},{"id":6,"type":"text","text":"{{落款单位}}","x":262.1,"y":171.4,"font":"SimSun","size":20,"color":"#000000","bold":false,"italic":false,"underline":false,"align":"right","visible":true}],"data":{"headers":["班级","姓名","奖项","获奖日期","落款单位","其他1","其他2","其他3","other5"],"rows":[["大一班","欧洛伦","立定跳远第一名","2026年5月","佛山市顺德区大良街道青葵幼儿园","","","",""],["三年级(2)班","雷泽","最佳球手","2026年5月","YC小学","","","",""]]}}
   },
   {
-    name: "自理能力比赛",
-    bgPath: "bg/5.jpg",
-    state: {"w":297,"h":210,"bg":"bg/5.jpg","elements":[{"id":1,"type":"text","text":"荣誉证书","x":148.5,"y":40,"font":"SimHei","size":55,"color":"#d9001b","bold":true,"italic":false,"underline":false,"align":"center","visible":true},{"id":2,"type":"text","text":"{{班级}} {{姓名}} 小朋友：","x":44.77,"y":67.44,"font":"KaiTi","size":24,"color":"#000000","bold":true,"italic":false,"underline":false,"align":"left","visible":true},{"id":3,"type":"text","text":"    在幼儿自理能力比赛中表现突出，展现了良好的\n动手能力与自理习惯，荣获：","x":44.54,"y":98.11,"font":"KaiTi","size":25.2,"color":"#000000","bold":false,"italic":false,"underline":false,"align":"left","visible":true},{"id":4,"type":"text","text":"“{{奖项}}”","x":151,"y":128.73,"font":"SimHei","size":38,"color":"#d9001b","bold":true,"italic":false,"underline":false,"align":"center","visible":true},{"id":5,"type":"text","text":"{{日期}}","x":244.3,"y":180.4,"font":"KaiTi","size":18,"color":"#000000","bold":false,"italic":false,"underline":false,"align":"right","visible":true},{"id":6,"type":"text","text":"{{学校名称}}","x":278.27,"y":166.5,"font":"KaiTi","size":20,"color":"#000000","bold":true,"italic":false,"underline":false,"align":"right","visible":true}],"data":{"headers":["班级","姓名","奖项","日期","学校名称"],"rows":[["大一班","亚索","穿衣服比赛一等奖","2026年5月","佛山市顺德区大良街道青葵幼儿园"],["中二班","盖伦","快速叠被子二等奖","2026年5月","佛山市顺德区大良街道青葵幼儿园"]],"activeIds":[],"editingId":null,"scale":0.77,"panX":85.3,"panY":60,"curIdx":0}}
+    name: "桌面水牌",
+    bgPath: "bg/11.jpg",
+    state: {"w":148,"h":105,"bg":"bg/11.jpg","elements":[{"id":2,"type":"text","text":"{{姓名}}","x":72.37319852987588,"y":53.81409544152278,"font":"SimHei","size":84.350628376964,"color":"#0f172a","bold":true,"italic":false,"underline":false,"align":"center","visible":true}],"data":{"headers":["姓名"],"rows":[["张建国"],["李美玲"],["陈教授"],["叶经理"]],"activeIds":[],"editingId":null,"scale":1,"panX":0,"panY":0,"curIdx":0},"activeIds":[],"editingId":null,"scale":1.2,"panX":183.83600000000007,"panY":128.1933435058594,"curIdx":0}
   }
 ];
 
-// 多媒体容错回调
 window.appFallback = function(imgEl, localPath) {
   const urls = app.getResourceUrls(localPath);
   let idx = parseInt(imgEl.getAttribute('data-err-idx') || '0') + 1;
@@ -938,6 +1019,9 @@ const app = {
       
       this.loadPresetFonts();
       this.setupSwipeGestures();
+      
+      // 同步排版打印设置的状态
+      this.onPrintLayoutModeChange();
 
       window.onresize = () => this.centerCanvas();
       window.onkeydown = e => this.handleKeys(e);
@@ -1000,14 +1084,14 @@ const app = {
   getResourceUrls(localPath) {
     if (!localPath || localPath.startsWith('data:') || localPath.startsWith('blob:') || localPath.startsWith('http')) return [localPath];
 
+    // “本地优先”逻辑：优先尝试读本地，秒开。失败才降级连云端 CDN
     const urls = [];
-    // 1. 首选方案：尝试从配置的 CDN / COS 加速桶拉取
+    urls.push(localPath); 
+    
     COS_BASE_URLS.forEach(baseUrl => {
       const cleanBase = baseUrl.replace(/\/$/, '');
       if (cleanBase) urls.push(cleanBase + '/' + localPath);
     });
-    // 2. 终极保底机制：如果在 COS 找不到或桶已失效，降级使用程序本地的同名文件
-    urls.push(localPath); 
     return urls;
   },
 
@@ -1130,12 +1214,20 @@ const app = {
     if (w > 0 && h > 0) { this.state.w = w; this.state.h = h; this.centerCanvas(); this.recordState(); }
   },
 
+  onPrintLayoutModeChange() {
+    const wrap = document.getElementById('gridSettingsWrap');
+    const select = document.getElementById('printLayoutMode');
+    if (select && wrap) {
+      wrap.style.display = select.value === 'grid' ? 'flex' : 'none';
+    }
+  },
+
   centerCanvas() {
     if (!this.dom.container) return;
     const cw = this.dom.container.clientWidth, ch = this.dom.container.clientHeight;
     const pxW = this.state.w * 3.78, pxH = this.state.h * 3.78;
     let fitScale = Math.min((cw - 60) / pxW, (ch - 120) / pxH);
-    this.state.scale = Math.min(Math.max(fitScale, 0.05), 0.9);
+    this.state.scale = Math.min(Math.max(fitScale, 0.05), 1.2);
     this.state.panX = (cw - pxW * this.state.scale) / 2;
     this.state.panY = (ch - pxH * this.state.scale) / 2;
     this.applyViewport();
@@ -1182,6 +1274,13 @@ const app = {
     this.centerCanvas();
     this.refreshAll();
     this.recordState();
+    
+    const layoutModeSelect = document.getElementById('printLayoutMode');
+    if (layoutModeSelect) {
+      layoutModeSelect.value = tpl.name === "桌面水牌" ? 'grid' : 'single';
+      this.onPrintLayoutModeChange();
+    }
+
     this.showToast('已成功载入模板：' + tpl.name);
     this.closeSidebars();
   },
@@ -1318,7 +1417,7 @@ const app = {
     let allOk = reports.every(r => r.matched === r.total && r.total > 0);
     let html = reports.map(r => {
       const missShort = r.misses.length ? '，缺: ' + r.misses.slice(0, 3).join('、') + (r.misses.length > 3 ? '...' : '') : '';
-      const missFull = r.misses.length ? '未配对学生名单 (' + r.misses.length + '项):\n' + r.misses.join('\n') : '匹配完整';
+      const missFull = r.misses.length ? '未配对名单 (' + r.misses.length + '项):\n' + r.misses.join('\n') : '匹配完整';
       return '<div title="' + missFull.replace(/"/g, '&quot;') + '" style="' + (r.misses.length ? 'cursor:help;' : '') + '">「' + r.name + '」成功配对 ' + r.matched + '/' + r.total + missShort + '</div>';
     }).join('<div style="height:4px"></div>');
     
@@ -1824,7 +1923,7 @@ const app = {
 
     this.refreshAll();
     this.recordState();
-    this.showToast('成功为全班同学填补“当前日期”');
+    this.showToast('成功填补“当前日期”');
   },
 
   setupQRCode() {
@@ -1843,57 +1942,231 @@ const app = {
     }
   },
 
-  startPrint() {
-    this.closeSidebars();
-    const zone = document.getElementById('printZone');
-    const w = this.state.w, h = this.state.h;
-    zone.innerHTML = '';
-    const style = document.createElement('style');
-    style.textContent = '@media print{@page{margin:0!important;size:' + w + 'mm ' + h + 'mm;}.print-page{width:' + w + 'mm;height:' + h + 'mm;position:relative;page-break-after:always;page-break-inside:avoid;overflow:hidden;}.print-bg{width:100%;height:100%;position:absolute;top:0;left:0;z-index:0;}.print-el{position:absolute;z-index:1;white-space:pre-wrap;word-break:break-all;}.print-img{position:absolute;z-index:1;overflow:hidden;}.print-img img{width:100%;height:100%;}}';
-    zone.appendChild(style);
-    this.state.data.rows.forEach(row => {
-      const page = document.createElement('div'); page.className = 'print-page';
-      const bg = document.createElement('img'); bg.className = 'print-bg'; 
-      const localPath = this.state.bg;
-      const urls = this.getResourceUrls(localPath);
-      bg.src = urls[0];
-      if (urls.length > 1) {
-         bg.onerror = function() { window.appFallback(this, localPath); };
+  // 核心安全背景解析辅助方法：优先提取当前工作区已被验证且成功加载的本地或CDN背景图
+  getPrintBgUrl() {
+    let bgUrl = '';
+    if (this.dom.paper && this.dom.paper.style.backgroundImage) {
+      const match = this.dom.paper.style.backgroundImage.match(/^url\(["']?([^"']+)["']?\)$/i);
+      if (match) {
+        bgUrl = match[1];
       }
-      page.appendChild(bg);
-      this.state.elements.forEach(el => {
-        if (!el.visible) return;
-        if (el.type === 'image') {
-          const imgUrl = this.resolveImageUrl(el.imgVar, row);
-          if (imgUrl) {
-            const d = document.createElement('div'); d.className = 'print-img';
+    }
+    if (!bgUrl && this.state.bg) {
+      bgUrl = this.getResourceUrls(this.state.bg)[0];
+    }
+    return bgUrl || 'bg/10.jpg';
+  },
+
+  // 将大体积 Base64 转换为极轻量的二进制 Blob 内存指针，彻底解决打印时 string 并发膨胀带来的严重卡死问题
+  dataURLtoBlobURL(dataurl) {
+    if (!dataurl || !dataurl.startsWith('data:')) return dataurl;
+    try {
+      const arr = dataurl.split(',');
+      const mime = arr[0].match(/:(.*?);/)[1];
+      const bstr = atob(arr[1]);
+      let n = bstr.length;
+      const u8arr = new Uint8Array(n);
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+      const blob = new Blob([u8arr], { type: mime });
+      return URL.createObjectURL(blob);
+    } catch (e) {
+      return dataurl;
+    }
+  },
+
+  startPrint() {
+    if (this.state.activeIds.length) { 
+      this.state.activeIds = []; 
+      this.refreshAll(); 
+    }
+    this.closeSidebars();
+    
+    const zone = document.getElementById('printZone');
+    zone.innerHTML = '';
+    
+    // 初始化临时 Blob 内存指针缓存，防止大图像在多页 HTML 拼接时造成浏览器内存爆炸和挂起
+    const blobCache = new Map();
+    const getBlobUrl = (url) => {
+      if (!url) return '';
+      if (!url.startsWith('data:')) return url;
+      if (blobCache.has(url)) return blobCache.get(url);
+      const bUrl = app.dataURLtoBlobURL(url);
+      blobCache.set(url, bUrl);
+      return bUrl;
+    };
+
+    // 绑定销毁监听，打印完毕或取消后，立刻释放物理内存
+    window.onafterprint = () => {
+      if (zone) zone.innerHTML = '';
+      blobCache.forEach(bUrl => {
+        if (bUrl.startsWith('blob:')) URL.revokeObjectURL(bUrl);
+      });
+      blobCache.clear();
+    };
+
+    const layoutMode = document.getElementById('printLayoutMode').value;
+    const rawBgUrl = this.getPrintBgUrl();
+    const bgUrl = getBlobUrl(rawBgUrl); // 转换为超轻量内存指针
+    const dataRows = this.state.data.rows;
+    
+    if (layoutMode === 'single') {
+      const w = this.state.w, h = this.state.h;
+      const style = document.createElement('style');
+      style.textContent = '@media print{@page{margin:0!important;size:' + w + 'mm ' + h + 'mm;}.print-page{width:' + w + 'mm;height:' + h + 'mm;position:relative;page-break-after:always;page-break-inside:avoid;overflow:hidden;}.print-bg{position:absolute;z-index:0;width:100%;height:100%;object-fit:cover;top:0;left:0;}.print-el{position:absolute;z-index:1;white-space:pre-wrap;word-break:break-all;width:max-content;}.print-img{position:absolute;z-index:1;overflow:hidden;}.print-img img{width:100%;height:100%;}}';
+      zone.appendChild(style);
+
+      let html = '';
+      for (let i = 0; i < dataRows.length; i++) {
+        const row = dataRows[i];
+        html += '<div class="print-page">';
+        const isLocalOrData = !this.state.bg || this.state.bg.startsWith('data:') || this.state.bg.startsWith('blob:') || this.state.bg.startsWith('http');
+        const onerrorAttr = isLocalOrData ? '' : `onerror="window.appFallback(this, '${this.state.bg}')"`;
+        html += `<img class="print-bg" src="${bgUrl}" ${onerrorAttr}>`;
+        
+        this.state.elements.forEach(el => {
+          if (!el.visible) return;
+          if (el.type === 'image') {
+            const rawImgUrl = this.resolveImageUrl(el.imgVar, row);
+            const imgUrl = getBlobUrl(rawImgUrl); // 二进制降维，实现毫秒级渲染
+            if (imgUrl) {
+              const l = (el.x / w * 100).toFixed(4) + '%';
+              const t = (el.y / h * 100).toFixed(4) + '%';
+              const wp = ((el.imgW || 30) / w * 100).toFixed(4) + '%';
+              const hp = ((el.imgH || 40) / h * 100).toFixed(4) + '%';
+              html += `<div class="print-img" style="top:${t};left:${l};width:${wp};height:${hp};transform:translate(-50%,-50%);"><img src="${imgUrl}" style="object-fit:${el.imgFit || 'cover'}"></div>`;
+            }
+          } else {
+            let txt = el.text;
+            this.state.data.headers.forEach((hh, idx) => { txt = txt.split('{{' + hh + '}}').join(row[idx] || ''); });
+            let safeTxt = txt.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            const off = el.align === 'center' ? -50 : (el.align === 'right' ? -100 : 0);
             const l = (el.x / w * 100).toFixed(4) + '%';
             const t = (el.y / h * 100).toFixed(4) + '%';
-            const wp = ((el.imgW || 30) / w * 100).toFixed(4) + '%';
-            const hp = ((el.imgH || 40) / h * 100).toFixed(4) + '%';
-            d.style.cssText = 'top:' + t + ';left:' + l + ';width:' + wp + ';height:' + hp + ';transform:translate(-50%,-50%);';
-            const img = document.createElement('img'); img.src = imgUrl; img.style.objectFit = el.imgFit || 'cover';
-            d.appendChild(img); page.appendChild(d);
+            const ls = el.letterSpacing || 0;
+            const lh = el.lineHeight || 1.4;
+            html += `<div class="print-el" style="top:${t};left:${l};font-family:'${el.font}';font-size:${el.size}pt;color:${el.color};font-weight:${el.bold ? 'bold' : 'normal'};font-style:${el.italic ? 'italic' : 'normal'};text-decoration:${el.underline ? 'underline' : 'none'};letter-spacing:${ls}px;line-height:${lh};transform:translate(${off}%,-50%);text-align:${el.align};">${safeTxt}</div>`;
           }
-        } else {
-          const d = document.createElement('div'); d.className = 'print-el';
-          let txt = el.text;
-          this.state.data.headers.forEach((hh, i) => { txt = txt.split('{{' + hh + '}}').join(row[i] || ''); });
-          d.innerText = txt;
-          const off = el.align === 'center' ? -50 : (el.align === 'right' ? -100 : 0);
-          const l = (el.x / w * 100).toFixed(4) + '%';
-          const t = (el.y / h * 100).toFixed(4) + '%';
-          
-          const letterSpacing = el.letterSpacing || 0;
-          const lineHeight = el.lineHeight || 1.4;
-
-          d.style.cssText = 'top:' + t + ';left:' + l + ';font-family:' + el.font + ';font-size:' + el.size + 'pt;color:' + el.color + ';font-weight:' + (el.bold ? 'bold' : 'normal') + ';font-style:' + (el.italic ? 'italic' : 'normal') + ';text-decoration:' + (el.underline ? 'underline' : 'none') + ';letter-spacing:' + letterSpacing + 'px;line-height:' + lineHeight + ';transform:translate(' + off + '%,-50%);';
-          page.appendChild(d);
+        });
+        html += '</div>';
+      }
+      zone.insertAdjacentHTML('beforeend', html);
+    } else {
+      // 拼版模式打印
+      const rows = parseInt(document.getElementById('gridRows').value) || 2;
+      const cols = parseInt(document.getElementById('gridCols').value) || 2;
+      const cutLines = document.getElementById('gridCutLines').checked;
+      const targetPaper = document.getElementById('gridTargetPaper').value.split(',').map(Number);
+      const targetW = targetPaper[0], targetH = targetPaper[1];
+      
+      const cellW = targetW / cols;
+      const cellH = targetH / rows;
+      const designW = this.state.w, designH = this.state.h;
+      
+      const fitScale = Math.min(cellW / designW, cellH / designH);
+      
+      const style = document.createElement('style');
+      let css = `@media print{
+        @page { margin: 0 !important; size: ${targetW}mm ${targetH}mm; }
+        .print-target-page {
+          width: ${targetW}mm;
+          height: ${targetH}mm;
+          position: relative;
+          page-break-after: always;
+          page-break-inside: avoid;
+          overflow: hidden;
+          display: grid;
+          grid-template-rows: repeat(${rows}, ${cellH}mm);
+          grid-template-columns: repeat(${cols}, ${cellW}mm);
+          background: #fff;
         }
-      });
-      zone.appendChild(page);
-    });
-    setTimeout(() => window.print(), 350);
+        .print-cell {
+          position: relative;
+          width: ${cellW}mm;
+          height: ${cellH}mm;
+          box-sizing: border-box;
+          overflow: hidden;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .print-cell.cut-r { border-right: 0.5px dashed #cbd5e1; }
+        .print-cell.cut-b { border-bottom: 0.5px dashed #cbd5e1; }
+        .print-card-wrapper {
+          position: relative;
+          width: ${designW}mm;
+          height: ${designH}mm;
+          transform: scale(${fitScale});
+          transform-origin: center center;
+          flex-shrink: 0;
+        }
+        .print-bg { position: absolute; z-index: 0; width: 100%; height: 100%; object-fit: cover; top: 0; left: 0; }
+        .print-el { position: absolute; z-index: 1; white-space: pre-wrap; word-break: break-all; width: max-content; }
+        .print-img { position: absolute; z-index: 1; overflow: hidden; }
+        .print-img img { width: 100%; height: 100%; }
+      }`;
+      style.textContent = css;
+      zone.appendChild(style);
+
+      let html = '';
+      const pageSize = rows * cols;
+      
+      for (let i = 0; i < dataRows.length; i += pageSize) {
+        html += '<div class="print-target-page">';
+        for (let j = 0; j < pageSize; j++) {
+          const rowIdx = i + j;
+          const isLastCol = (j % cols) === cols - 1;
+          const isLastRow = Math.floor(j / cols) === rows - 1;
+          
+          let cellClass = 'print-cell';
+          if (cutLines) {
+            if (!isLastCol) cellClass += ' cut-r';
+            if (!isLastRow) cellClass += ' cut-b';
+          }
+          
+          html += `<div class="${cellClass}">`;
+          if (rowIdx < dataRows.length) {
+            const row = dataRows[rowIdx];
+            html += `<div class="print-card-wrapper">`;
+            
+            const isLocalOrData = !this.state.bg || this.state.bg.startsWith('data:') || this.state.bg.startsWith('blob:') || this.state.bg.startsWith('http');
+            const onerrorAttr = isLocalOrData ? '' : `onerror="window.appFallback(this, '${this.state.bg}')"`;
+            html += `<img class="print-bg" src="${bgUrl}" ${onerrorAttr}>`;
+            
+            this.state.elements.forEach(el => {
+              if (!el.visible) return;
+              if (el.type === 'image') {
+                const rawImgUrl = this.resolveImageUrl(el.imgVar, row);
+                const imgUrl = getBlobUrl(rawImgUrl); // 转换为二进制指针
+                if (imgUrl) {
+                  const l = (el.x / designW * 100).toFixed(4) + '%';
+                  const t = (el.y / designH * 100).toFixed(4) + '%';
+                  const wp = ((el.imgW || 30) / designW * 100).toFixed(4) + '%';
+                  const hp = ((el.imgH || 40) / designH * 100).toFixed(4) + '%';
+                  html += `<div class="print-img" style="top:${t};left:${l};width:${wp};height:${hp};transform:translate(-50%,-50%);"><img src="${imgUrl}" style="object-fit:${el.imgFit || 'cover'}"></div>`;
+                }
+              } else {
+                let txt = el.text;
+                this.state.data.headers.forEach((hh, idx) => { txt = txt.split('{{' + hh + '}}').join(row[idx] || ''); });
+                let safeTxt = txt.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                const off = el.align === 'center' ? -50 : (el.align === 'right' ? -100 : 0);
+                const l = (el.x / designW * 100).toFixed(4) + '%';
+                const t = (el.y / designH * 100).toFixed(4) + '%';
+                const ls = el.letterSpacing || 0;
+                const lh = el.lineHeight || 1.4;
+                html += `<div class="print-el" style="top:${t};left:${l};font-family:'${el.font}';font-size:${el.size}pt;color:${el.color};font-weight:${el.bold ? 'bold' : 'normal'};font-style:${el.italic ? 'italic' : 'normal'};text-decoration:${el.underline ? 'underline' : 'none'};letter-spacing:${ls}px;line-height:${lh};transform:translate(${off}%,-50%);text-align:${el.align};">${safeTxt}</div>`;
+              }
+            });
+            html += '</div>';
+          }
+          html += '</div>';
+        }
+        html += '</div>';
+      }
+      zone.insertAdjacentHTML('beforeend', html);
+    }
+    setTimeout(() => window.print(), 400);
   },
 
   showToast(msg) { const t = document.getElementById('toast'); t.innerText = msg; t.style.display = 'block'; t.style.opacity = '1'; clearTimeout(this._toastT); this._toastT = setTimeout(() => { t.style.opacity = '0'; setTimeout(() => { t.style.display = 'none'; }, 300); }, 2500); },
@@ -1927,26 +2200,18 @@ const app = {
       }
       
       if (this.pointers.length === 1) {
-        // 单指或鼠标——平移画布
         this.state.panX += m.clientX - this.panStartX;
         this.state.panY += m.clientY - this.panStartY;
         this.panStartX = m.clientX;
         this.panStartY = m.clientY;
         this.applyViewport();
       } else if (this.pointers.length === 2) {
-        // 双指——智能捏合缩放
         const d = Math.hypot(this.pointers[0].x - this.pointers[1].x, this.pointers[0].y - this.pointers[1].y);
         if (this.prevPinchDist > 0) {
-          const ratio = d / this.prevPinchDist;
-          const centerX = (this.dom.container.clientWidth / 2);
-          const centerY = (this.dom.container.clientHeight / 2);
-          
           const oldScale = this.state.scale;
-          this.state.scale = Math.max(0.05, Math.min(3, this.state.scale * ratio));
-          
-          const zoomFactor = this.state.scale / oldScale;
-          this.state.panX = centerX - (centerX - this.state.panX) * zoomFactor;
-          this.state.panY = centerY - (centerY - this.state.panY) * zoomFactor;
+          this.state.scale = Math.max(0.05, Math.min(3, this.state.scale * (d / this.prevPinchDist)));
+          this.state.panX = (this.dom.container.clientWidth / 2) - ((this.dom.container.clientWidth / 2) - this.state.panX) * (d / this.prevPinchDist);
+          this.state.panY = (this.dom.container.clientHeight / 2) - ((this.dom.container.clientHeight / 2) - this.state.panY) * (d / this.prevPinchDist);
           
           this.applyViewport();
         }
@@ -2072,47 +2337,42 @@ const app = {
       grid.appendChild(div);
     });
     
-    const fragment = document.createDocumentFragment();
-    
     for (let i = 1; i <= PRESET_BG_COUNT; i++) {
       const localPath = 'bg/' + i + '.jpg';
+      const active = this.state.bg === localPath;
+      const primaryUrl = this.getResourceUrls(localPath)[0];
+      
       const div = document.createElement('div');
-      div.id = 'bg-preset-card-' + i;
-      div.style.display = 'none'; 
-      fragment.appendChild(div);
-      
-      const urls = this.getResourceUrls(localPath);
-      let attempt = 0;
-
-      const tryLoad = () => {
-        if (attempt >= urls.length) {
-          div.remove(); 
-          return;
-        }
-        const imgProbe = new Image();
-        imgProbe.onload = () => {
-          const active = this.state.bg === localPath;
-          div.style.cssText = 'border:2.5px solid ' + (active ? 'var(--accent)' : '#eee') + ';border-radius:10px;overflow:hidden;cursor:pointer;aspect-ratio:1.41;background:#eee;display:block;';
-          div.onclick = () => app.setBg(localPath);
-          div.innerHTML = '<img src="' + urls[attempt] + '" style="width:100%;height:100%;object-fit:cover">';
-        };
-        imgProbe.onerror = () => {
-          attempt++;
-          tryLoad(); 
-        };
-        imgProbe.src = urls[attempt]; 
-      };
-      
-      tryLoad();
+      div.className = 'bg-card-item';
+      div.setAttribute('data-bg-url', localPath);
+      div.style.cssText = 'border:2.5px solid ' + (active ? 'var(--accent)' : '#eee') + ';border-radius:10px;overflow:hidden;cursor:pointer;aspect-ratio:1.41;background:#eee;';
+      div.onclick = () => app.setBg(localPath);
+      div.innerHTML = '<img src="' + primaryUrl + '" onerror="window.appFallback(this, \'' + localPath + '\')" style="width:100%;height:100%;object-fit:cover" draggable="false">';
+      grid.appendChild(div);
     }
-    grid.appendChild(fragment);
   },
 
   setBg(p) {
     if (p && typeof p === 'object' && p.getAttribute) {
       p = p.getAttribute('data-url');
     }
-    this.state.bg = p; this.updateBg(); this.renderBgGrid(); this.recordState();
+    this.state.bg = p; 
+    this.updateBg(); 
+    this.recordState();
+    
+    // 无感响应式更新，无需重绘整个列表
+    const grid = document.getElementById('bgGrid');
+    if (grid) {
+      const cards = grid.querySelectorAll('.bg-card-item');
+      cards.forEach(card => {
+        const cardUrl = card.getAttribute('data-bg-url');
+        if (cardUrl === p) {
+          card.style.borderColor = 'var(--accent)';
+        } else {
+          card.style.borderColor = '#eee';
+        }
+      });
+    }
   },
   
   updateBg() { 
@@ -2133,7 +2393,6 @@ const app = {
       }
       const img = new Image();
       img.onload = () => {
-        // 确保图片加载完后，用户没有切换到其他背景
         if (this.state.bg === bg) {
           this.dom.paper.style.backgroundImage = "url('" + urls[attempt] + "')";
         }
@@ -2165,10 +2424,10 @@ const app = {
     const list = document.getElementById('layerList');
     list.innerHTML = this.state.elements.slice().reverse().map(el => {
       const label = el.type === 'image'
-        ? '\uD83D\uDDBC\uFE0F [照片框] {{' + (el.imgVar || '') + '}}'
+        ? '🖼️ [照片框] {{' + (el.imgVar || '') + '}}'
         : String(el.text).replace(/</g, '&lt;').substring(0, 30);
       const bg = this.state.activeIds.includes(el.id) ? '#f0f7ff' : '';
-      return '<div style="padding:12px;border-bottom:1px solid #f1f5f9;display:flex;justify-content:space-between;align-items:center;cursor:pointer;background:' + bg + '" onclick="app.selectLayer(' + el.id + ')" oncontextmenu="app.showMenu(event,' + el.id + ')"><span style="font-size:12px;font-weight:600;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;width:180px">' + label + '</span><span style="cursor:pointer" onclick="event.stopPropagation();app.toggleVisible(' + el.id + ')">' + (el.visible ? '\uD83D\uDC41\uFE0F' : '\uD83D\uDEAB') + '</span></div>';
+      return '<div style="padding:12px;border-bottom:1px solid #f1f5f9;display:flex;justify-content:space-between;align-items:center;cursor:pointer;background:' + bg + '" onclick="app.selectLayer(' + el.id + ')" oncontextmenu="app.showMenu(event,' + el.id + ')"><span style="font-size:12px;font-weight:600;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;width:180px">' + label + '</span><span style="cursor:pointer" onclick="event.stopPropagation();app.toggleVisible(' + el.id + ')">' + (el.visible ? '👁️' : '🚫') + '</span></div>';
     }).join('');
   },
 
@@ -2263,7 +2522,7 @@ const app = {
   },
   delRow(i) { this.state.data.rows.splice(i, 1); if (!this.state.data.rows.length) this.state.data.rows = [new Array(Math.max(1, this.state.data.headers.length)).fill('')]; if (this.state.curIdx >= this.state.data.rows.length) this.state.curIdx = Math.max(0, this.state.data.rows.length - 1); this.refreshAll(); this.recordState(); },
   delCol(i) { if (this.state.data.headers.length <= 1) { this.showToast('至少需要保留一列名单数据'); return; } if (confirm('确定要删除这整一列吗？')) { this.state.data.headers.splice(i, 1); this.state.data.rows.forEach(r => r.splice(i, 1)); this.refreshAll(); this.recordState(); } },
-  clearAllData() { if (confirm('确定清空当前所有的学生名单吗？')) { this.state.data.rows = [new Array(Math.max(1, this.state.data.headers.length)).fill('')]; this.state.curIdx = 0; this.refreshAll(); this.recordState(); } },
+  clearAllData() { if (confirm('确定清空当前所有的名单吗？')) { this.state.data.rows = [new Array(Math.max(1, this.state.data.headers.length)).fill('')]; this.state.curIdx = 0; this.refreshAll(); this.recordState(); } },
 
   parseCSV(text) { let rows = [], row = [], inQuote = false, token = ''; for (let i = 0; i < text.length; i++) { let c = text[i], next = text[i+1]; if (c === '"') { if (inQuote && next === '"') { token += '"'; i++; } else inQuote = !inQuote; } else if (c === ',' && !inQuote) { row.push(token); token = ''; } else if ((c === '\r' || c === '\n') && !inQuote) { row.push(token); rows.push(row); row = []; token = ''; if (c === '\r' && next === '\n') i++; } else token += c; } if (token || row.length) { row.push(token); rows.push(row); } return rows; },
 
@@ -2304,8 +2563,8 @@ const app = {
       const ws = XLSX.utils.aoa_to_sheet([headers, sampleRow]);
       ws['!cols'] = headers.map(() => ({ wch: 15 }));
       const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, '学生名单导入模板');
-      XLSX.writeFile(wb, '学生名单导入模板.xlsx');
+      XLSX.utils.book_append_sheet(wb, ws, '导入模板');
+      XLSX.writeFile(wb, '名单导入模板.xlsx');
     } catch (err) {
       this.showToast(err.message || '模板创建失败');
     }
@@ -2358,7 +2617,7 @@ const app = {
     this.removeEmptyColumns();
     this.state.curIdx = Math.min(this.state.curIdx, Math.max(0, this.state.data.rows.length - 1));
     this.refreshAll(); this.recordState();
-    this.showToast('成功录入 ' + this.state.data.rows.length + ' 名学生的数据');
+    this.showToast('成功录入 ' + this.state.data.rows.length + ' 名的数据');
   },
 
   removeEmptyColumns() {

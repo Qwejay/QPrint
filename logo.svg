@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <!-- 主色调：科技蓝 (径向渐变，从外到内) -->
+    <radialGradient id="techBlue" cx="50%" cy="50%" r="70%" fx="50%" fy="50%">
+      <stop offset="0%" stop-color="#1D4ED8" /> <!-- 外圈：Google Blue 800 -->
+      <stop offset="100%" stop-color="#3B82F6" /> <!-- 内圈：Google Blue 600 -->
+    </radialGradient>
+
+    <!-- 辅助色：琥珀金 (用于印章/认证) -->
+    <linearGradient id="amberGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F59E0B" /> <!-- Google Amber 500 -->
+      <stop offset="100%" stop-color="#B45309" /> <!-- Google Amber 800 -->
+    </linearGradient>
+
+    <!-- 中性色：背景/纸张 -->
+    <linearGradient id="paper" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="100%" stop-color="#F3F4F6" />
+    </linearGradient>
+
+    <!-- 中性色：打印机/深色UI元素 -->
+    <linearGradient id="uiDark" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#1F2937" /> <!-- Microsoft Gray 900 -->
+      <stop offset="100%" stop-color="#111827" /> <!-- Microsoft Gray 950 -->
+    </linearGradient>
+
+    <!-- 大厂风格阴影 -->
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+
+  <!-- 核心圆形背景 (使用径向渐变，从外到内) -->
+  <circle cx="256" cy="256" r="120" fill="url(#techBlue)" filter="url(#shadow)" />
+
+  <!-- 中心文档/纸张 -->
+  <rect x="206" y="206" width="100" height="140" rx="8" fill="url(#paper)" filter="url(#shadow)" />
+
+  <!-- 文档细节 (极简线条) -->
+  <rect x="226" y="236" width="60" height="6" rx="3" fill="#9CA3AF" /> <!-- Microsoft Gray 400 -->
+  <rect x="226" y="254" width="80" height="4" rx="2" fill="#D1D5DB" /> <!-- Microsoft Gray 300 -->
+  <rect x="226" y="268" width="70" height="4" rx="2" fill="#D1D5DB" /> <!-- Microsoft Gray 300 -->
+
+  <!-- 认证印章 -->
+  <circle cx="306" cy="306" r="16" fill="url(#amberGold)" filter="url(#shadow)" />
+  <circle cx="306" cy="306" r="10" fill="#FBBF24" /> <!-- Google Amber 400 -->
+
+  <!-- 打印机出纸口 -->
+  <rect x="186" y="186" width="140" height="24" rx="12" fill="url(#uiDark)" filter="url(#shadow)" />
+  <rect x="206" y="196" width="100" height="4" rx="2" fill="#3B82F6" /> <!-- Google Blue 600 -->
+</svg>
