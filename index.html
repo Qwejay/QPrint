@@ -32,7 +32,7 @@
 
     header { height: 65px; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 16px; z-index: 800; flex-shrink: 0; }
     .logo-box { display: flex; align-items: center; gap: 8px; }
-    .logo-icon { width: 34px; height: 32px; background: linear-gradient(135deg, var(--accent), #3b82f6); border-radius: 9px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 900; font-size: 18px; }
+    .logo-icon { width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
     .logo-text { font-weight: 900; font-size: 18px; letter-spacing: -0.5px; }
     .logo-ver { font-size: 11px; color: var(--text-muted); font-weight: 700; padding-top: 4px; }
 
@@ -129,11 +129,13 @@
     .drop-zone .dz-title { font-size: 12px; font-weight: 700; color: var(--text-main); margin-bottom: 2px; }
 
     .tpl-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px 6px; width: 100%; }
-    .tpl-wrap { cursor: pointer; display: flex; flex-direction: column; gap: 5px; min-width: 0; width: 100%; }
+    .tpl-wrap { cursor: pointer; display: flex; flex-direction: column; gap: 5px; min-width: 0; width: 100%; position: relative; }
     .tpl-card { width: 100%; height: 58px; object-fit: cover; border: 1.5px solid var(--border); border-radius: 8px; background-color: #eee; transition: all 0.2s ease; }
     .tpl-wrap:hover .tpl-card { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
     .tpl-name { font-size: 10px; text-align: center; color: var(--text-main); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: 0.2s; width: 100%; margin-top: 2px; }
     .tpl-wrap:hover .tpl-name { color: var(--accent); }
+    .tpl-restore { position: absolute; top: 4px; right: 4px; width: 20px; height: 20px; background: rgba(0,0,0,0.6); color: white; border: none; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; cursor: pointer; transition: 0.2s; z-index: 10; padding: 0; line-height: 1; }
+    .tpl-restore:hover { background: var(--danger); transform: scale(1.1); }
 
     .img-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; max-height: 360px; overflow-y: auto; }
     .img-item { aspect-ratio: 1; border: 2px solid #e2e8f0; border-radius: 8px; overflow: hidden; position: relative; background: #f8fafc; }
@@ -196,9 +198,12 @@
 
 <header>
   <div class="logo-box">
-    <div class="logo-icon">S</div>
+    <!-- 使用 Base64 编码的 img 渲染 SVG，避免本地运行触发跨域限制 -->
+    <div class="logo-icon">
+      <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIj48ZGVmcz48cmFkaWFsR3JhZGllbnQgaWQ9InRlY2hCbHVlIiBjeD0iNTAlIiBjeT0iNTAlIiByPSI3MCUiIGZ4PSI1MCUiIGZ5PSI1MCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMxRDRFRDgiIC8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjM0I4MkY2IiAvPjwvcmFkaWFsR3JhZGllbnQ+PGxpbmVhckdyYWRpZW50IGlkPSJhbWJlckdvbGQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNGNTlFMEIiIC8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjQjQ1MzA5IiAvPjwvbGluZWFyR3JhZGllbnQ+PGxpbmVhckdyYWRpZW50IGlkPSJwYXBlciIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNGRkZGRkYiIC8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjRjNGNEY2IiAvPjwvbGluZWFyR3JhZGllbnQ+PGxpbmVhckdyYWRpZW50IGlkPSJ1aURhcmsiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjAlIj48c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjMUYyOTM3IiAvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzExMTgyNyIgLz48L2xpbmVhckdyYWRpZW50PjxmaWx0ZXIgaWQ9InNoYWRvdyIgeD0iLTEwJSIgeT0iLTEwJSIgd2lkdGg9IjEyMCUiIGhlaWdodD0iMTIwJSI+PGZlRHJvcFNoYWRvdyBkeD0iMCIgZHk9IjQiIHN0ZERldmlhdGlvbj0iNiIgZmxvb2QtY29sb3I9IiMwMDAwMDAiIGZsb29kLW9wYWNpdHk9IjAuMTUiLz48L2ZpbHRlcj48L2RlZnM+PGNpcmNsZSBjeD0iMjU2IiBjeT0iMjU2IiByPSIxMjAiIGZpbGw9InVybCgjdGVjaEJsdWUpIiBmaWx0ZXI9InVybCgjc2hhZG93KSIgLz48cmVjdCB4PSIyMDYiIHk9IjIwNiIgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxNDAiIHJ4PSI4IiBmaWxsPSJ1cmwoI3BhcGVyKSIgZmlsdGVyPSJ1cmwoI3NoYWRvdykiIC8+PHJlY3QgeD0iMjI2IiB5PSIyMzYiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzlDQTNBRiIgLz48cmVjdCB4PSIyMjYiIHk9IjI1NCIgd2lkdGg9IjgwIiBoZWlnaHQ9IjQiIHJ4PSIyIiBmaWxsPSIjRDFENURCIiAvPjxyZWN0IHg9IjIyNiIgeT0iMjY4IiB3aWR0aD0iNzAiIGhlaWdodD0iNCIgcng9IjIiIGZpbGw9IiNEMUQ1REIiIC8+PGNpcmNsZSBjeD0iMzA2IiBjeT0iMzA2IiByPSIxNiIgZmlsbD0idXJsKCNhbWJlckdvbGQpIiBmaWx0ZXI9InVybCgjc2hhZG93KSIgLz48Y2lyY2xlIGN4PSIzMDYiIGN5PSIzMDYiIHI9IjEwIiBmaWxsPSIjRkJCRjI0IiAvPjxyZWN0IHg9IjE4NiIgeT0iMTg2IiB3aWR0aD0iMTQwIiBoZWlnaHQ9IjI0IiByeD0iMTIiIGZpbGw9InVybCgjdWlEYXJrKSIgZmlsdGVyPSJ1cmwoI3NoYWRvdykiIC8+PHJlY3QgeD0iMjA2IiB5PSIxOTYiIHdpZHRoPSIxMDAiIGhlaWdodD0iNCIgcng9IjIiIGZpbGw9IiMzQjgyRjYiIC8+PC9zdmc+" width="100%" height="100%" style="pointer-events: none;" alt="Logo">
+    </div>
     <div class="logo-text">QPrint</div>
-    <div class="logo-ver">1.0.2</div>
+    <div class="logo-ver">1.0.3</div>
   </div>
   <div style="display:flex; gap:6px; align-items:center;">
     <button class="btn sm hide-on-mobile" onclick="app.clearCache()" style="color:var(--danger); border-color:#fee2e2;" title="清除本地所有缓存数据">🗑️ 清除缓存</button>
@@ -504,7 +509,7 @@
 <script>
 "use strict";
 
-const STORAGE_KEY = 'QPrint_1.0.2';
+const STORAGE_KEY = 'QPrint_1.0.3';
 const PRESET_BG_COUNT = 16;
 const PAPER_PRESETS = { '297,210': 1, '210,297': 1, '420,297': 1, '210,148': 1, '250,176': 1, '279,216': 1 };
 
@@ -522,41 +527,41 @@ const TEMPLATES = [
   {
     name: "毕业证书",
     bgPath: "bg/10.jpg",
-    state: {"w":297,"h":210,"bg":"bg/10.jpg","elements":[{"id":2,"type":"image","imgVar":"姓名","x":52.1,"y":110.49,"imgW":55.3,"imgH":83.7,"imgFit":"cover","visible":true},{"id":3,"type":"text","text":"{{姓名}}小朋友：","x":92.6,"y":80.3,"font":"SimHei","size":24,"color":"#000000","bold":true,"italic":false,"underline":false,"align":"left","visible":true}],"data":{"headers":["姓名"],"rows":[["欧洛伦"],["迪奥娜"],["可莉"],["雷泽"]]},"activeIds":[],"editingId":null,"scale":0.9,"panX":120.8,"panY":69.7,"curIdx":1}
+    state: {"w":297,"h":210,"bg":"bg/10.jpg","elements":[{"id":2,"type":"image","imgVar":"姓名","x":52.1,"y":110.49,"imgW":55.3,"imgH":83.7,"imgFit":"cover","visible":true},{"id":3,"type":"text","text":"{{姓名}}小朋友：","x":90.71998950995673,"y":83.1199727056962,"font":"SimHei","size":23,"color":"#000000","bold":true,"italic":false,"underline":false,"align":"left","visible":true,"letterSpacing":0,"lineHeight":1.4},{"id":1783008817584,"type":"text","text":"    在幼儿园这个大家庭里，记录着你快乐的童年。\n今天是你毕业的日子，承载着老师的祝福与殷切希望。\n亲爱的孩子，放飞你的梦想，去勇攀高峰吧！","x":89.96228111195283,"y":113.94949194668379,"font":"SimHei","size":23,"color":"#000000","bold":true,"italic":false,"underline":false,"align":"left","letterSpacing":0,"lineHeight":1.6,"visible":true},{"id":1783008888929,"type":"text","text":"佛山市顺德区大良街道QK幼儿园","x":209.59937993717193,"y":158.266141545513,"font":"SimHei","size":21,"color":"#000000","bold":false,"italic":false,"underline":false,"align":"center","letterSpacing":0,"lineHeight":1.4,"visible":true},{"id":1783008903236.1777,"type":"text","text":"2026年7月10日","x":207.7061611336575,"y":172.66607925074615,"font":"SimHei","size":21,"color":"#000000","bold":false,"italic":false,"underline":false,"align":"center","letterSpacing":0,"lineHeight":1.4,"visible":true}],"data":{"headers":["姓名"],"rows":[["李明"],["王悦"],["陈华"],["张伟"]]},"activeIds":[],"editingId":null,"scale":0.5629487110968593,"panX":30,"panY":91.06568708323468,"curIdx":0}
   },
   {
     name: "运动会奖状",
     bgPath: "bg/2.jpg",
     state: {"w":297,"h":210,"scale":0.7,"panX":0,"panY":0,"bg":"bg/2.jpg","customBgs":[],"activeIds":[],"editingId":null,"elements":[
           {"id":1,"type":"text","text":"荣誉证书","x":148.5,"y":45,"font":"SimHei","size":55,"color":"#d9001b","bold":true,"italic":false,"underline":false,"align":"center","visible":true},
-          {"id":2,"type":"text","text":"{{姓名}}小朋友：","x":48,"y":77.4,"font":"SimSun","size":22,"color":"#000000","bold":false,"italic":false,"underline":false,"align":"left","visible":true},
-          {"id":3,"type":"text","text":"    在青葵幼儿园“萌动新春，赛场奔腾”运动会中\n表现突出，荣获：","x":48,"y":106.5,"font":"SimSun","size":24,"color":"#000000","bold":false,"italic":false,"underline":false,"align":"left","visible":true},
+          {"id":2,"type":"text","text":"{{姓名}}同学：","x":48,"y":77.4,"font":"SimSun","size":22,"color":"#000000","bold":false,"italic":false,"underline":false,"align":"left","visible":true},
+          {"id":3,"type":"text","text":"    在阳光实验学校“萌动新春，赛场奔腾”运动会中\n表现突出，荣获：","x":48,"y":106.5,"font":"SimSun","size":24,"color":"#000000","bold":false,"italic":false,"underline":false,"align":"left","visible":true},
           {"id":4,"type":"text","text":"{{奖项}}","x":148.5,"y":133.4,"font":"SimHei","size":36,"color":"#000000","bold":true,"italic":false,"underline":false,"align":"center","visible":true},
           {"id":5,"type":"text","text":"{{获奖日期}}","x":232.2,"y":183.6,"font":"SimSun","size":20,"color":"#000000","bold":false,"italic":false,"underline":false,"align":"right","visible":true},
           {"id":6,"type":"text","text":"{{落款单位}}","x":262.1,"y":171.4,"font":"SimSun","size":20,"color":"#000000","bold":false,"italic":false,"underline":false,"align":"right","visible":true}
         ],
-        "data":{"headers":["班级","姓名","奖项","获奖日期","落款单位","其他1","其他2","其他3","other5"],"rows":[["大一班","欧洛伦","立定跳远第一名","2026年5月","佛山市顺德区大良街道青葵幼儿园","","","",""],["三年级(2)班","雷泽","最佳球手","2026年5月","YC小学","","","",""]]}
+        "data":{"headers":["班级","姓名","奖项","获奖日期","落款单位","其他1","其他2","其他3","other5"],"rows":[["大一班","李明","立定跳远第一名","2026年5月","阳光市实验幼儿园","","","",""],["三年级(2)班","张伟","最佳球手","2026年5月","阳光第一小学","","","",""]]}
       }
   },
   {
     name: "桌面水牌",
     bgPath: "bg/11.jpg",
-    state: {"w":148,"h":105,"bg":"bg/11.jpg","elements":[{"id":2,"type":"text","text":"{{姓名}}","x":74,"y":52.5,"font":"SimHei","size":84,"color":"#0f172a","bold":true,"italic":false,"underline":false,"align":"center","visible":true}],"data":{"headers":["姓名"],"rows":[["张建国"],["李美玲"],["陈教授"],["叶经理"]]},"activeIds":[],"editingId":null,"scale":1.2,"panX":0,"panY":0,"curIdx":0}
+    state: {"w":148,"h":105,"bg":"bg/11.jpg","elements":[{"id":2,"type":"text","text":"{{姓名}}","x":74,"y":52.5,"font":"SimHei","size":84,"color":"#0f172a","bold":true,"italic":false,"underline":false,"align":"center","visible":true}],"data":{"headers":["姓名"],"rows":[["张建国"],["李美玲"],["王教授"],["刘主任"]]},"activeIds":[],"editingId":null,"scale":1.2,"panX":0,"panY":0,"curIdx":0}
   },
   {
     name: "参观证书",
     bgPath: "bg/13.jpg",
-    state: {"w":70,"h":100,"bg":"bg/13.jpg","elements":[{"id":1,"type":"text","text":"2026年优质园所参观证","x":35,"y":14,"font":"Microsoft YaHei","size":12,"color":"#ffffff","bold":true,"italic":false,"underline":false,"align":"center","visible":true},{"id":2,"type":"image","imgVar":"照片","x":35,"y":38,"imgW":26,"imgH":36,"imgFit":"cover","visible":true},{"id":3,"type":"text","text":"{{姓名}}","x":35,"y":64,"font":"SimHei","size":18,"color":"#0f172a","bold":true,"italic":false,"underline":false,"align":"center","letterSpacing":2,"visible":true},{"id":4,"type":"text","text":"{{学校}}\n{{职务}}","x":35,"y":75,"font":"Microsoft YaHei","size":10,"color":"#475569","bold":false,"italic":false,"underline":false,"align":"center","lineHeight":1.4,"visible":true},{"id":5,"type":"image","imgVar":"https://api.qrserver.com/v1/create-qr-code/?size=300x300&data={{参会编号}}","x":35,"y":90,"imgW":16,"imgH":16,"imgFit":"contain","visible":true}],"data":{"headers":["姓名","职务","学校","参会编号","照片"],"rows":[["欧洛伦","副园长","QK幼儿园","VIP-2026-001","欧洛伦"],["可莉","教研员","CL幼儿园","SP-2026-002","可莉"],["雷泽","园长","MY幼儿园","G-2026-003","雷泽"]]},"activeIds":[],"editingId":null,"scale":1,"panX":0,"panY":0,"curIdx":0}
+    state: {"w":70,"h":100,"bg":"bg/13.jpg","elements":[{"id":1,"type":"text","text":"2026年优质园所参观证","x":35,"y":14,"font":"Microsoft YaHei","size":12,"color":"#ffffff","bold":true,"italic":false,"underline":false,"align":"center","visible":true},{"id":2,"type":"image","imgVar":"照片","x":35,"y":38,"imgW":26,"imgH":36,"imgFit":"cover","visible":true},{"id":3,"type":"text","text":"{{姓名}}","x":35,"y":64,"font":"SimHei","size":18,"color":"#0f172a","bold":true,"italic":false,"underline":false,"align":"center","letterSpacing":2,"visible":true},{"id":4,"type":"text","text":"{{学校}}\n{{职务}}","x":35,"y":75,"font":"Microsoft YaHei","size":10,"color":"#475569","bold":false,"italic":false,"underline":false,"align":"center","lineHeight":1.4,"visible":true},{"id":5,"type":"image","imgVar":"https://api.qrserver.com/v1/create-qr-code/?size=300x300&data={{参会编号}}","x":35,"y":90,"imgW":16,"imgH":16,"imgFit":"contain","visible":true}],"data":{"headers":["姓名","职务","学校","参会编号","照片"],"rows":[["张建国","副园长","实验幼儿园","VIP-2026-001","张建国"],["陈华","教研员","第一幼儿园","SP-2026-002","陈华"],["张伟","园长","阳光幼儿园","G-2026-003","张伟"]]},"activeIds":[],"editingId":null,"scale":1,"panX":0,"panY":0,"curIdx":0}
   },
   {
     name: "考试准考证",
     bgPath: "bg/12.jpg",
-    state: {"w":148,"h":105,"bg":"bg/12.jpg","elements":[{"id":1,"type":"text","text":"2026年度全省统一模拟考试","x":74,"y":18,"font":"SimHei","size":16,"color":"#000000","bold":true,"italic":false,"underline":false,"align":"center","visible":true},{"id":2,"type":"text","text":"准 考 证","x":74,"y":30,"font":"SimSun","size":12,"color":"#000000","bold":false,"italic":false,"underline":false,"align":"center","letterSpacing":4,"visible":true},{"id":3,"type":"image","imgVar":"照片","x":115,"y":65,"imgW":26,"imgH":36,"imgFit":"cover","visible":true},{"id":4,"type":"text","text":"姓    名：{{姓名}}","x":25,"y":48,"font":"SimHei","size":12,"color":"#000000","bold":false,"italic":false,"underline":false,"align":"left","visible":true},{"id":5,"type":"text","text":"性    别：{{性别}}","x":25,"y":60,"font":"SimHei","size":12,"color":"#000000","bold":false,"italic":false,"underline":false,"align":"left","visible":true},{"id":6,"type":"text","text":"准考证号：{{考号}}","x":25,"y":72,"font":"SimHei","size":12,"color":"#000000","bold":false,"italic":false,"underline":false,"align":"left","visible":true},{"id":7,"type":"text","text":"考场座位：{{考场}} - {{座位号}}","x":25,"y":84,"font":"SimHei","size":12,"color":"#000000","bold":false,"italic":false,"underline":false,"align":"left","visible":true}],"data":{"headers":["姓名","性别","考号","考场","座位号","照片"],"rows":[["欧洛伦","男","2026001","第一考场","01号","欧洛伦"],["可莉","女","2026002","第一考场","02号","可莉"]]},"activeIds":[],"editingId":null,"scale":1,"panX":0,"panY":0,"curIdx":0}
+    state: {"w":148,"h":105,"bg":"bg/12.jpg","elements":[{"id":1,"type":"text","text":"2026年度全市统一模拟考试","x":74,"y":18,"font":"SimHei","size":16,"color":"#000000","bold":true,"italic":false,"underline":false,"align":"center","visible":true},{"id":2,"type":"text","text":"准 考 证","x":74,"y":30,"font":"SimSun","size":12,"color":"#000000","bold":false,"italic":false,"underline":false,"align":"center","letterSpacing":4,"visible":true},{"id":3,"type":"image","imgVar":"照片","x":115,"y":65,"imgW":26,"imgH":36,"imgFit":"cover","visible":true},{"id":4,"type":"text","text":"姓    名：{{姓名}}","x":25,"y":48,"font":"SimHei","size":12,"color":"#000000","bold":false,"italic":false,"underline":false,"align":"left","visible":true},{"id":5,"type":"text","text":"性    别：{{性别}}","x":25,"y":60,"font":"SimHei","size":12,"color":"#000000","bold":false,"italic":false,"underline":false,"align":"left","visible":true},{"id":6,"type":"text","text":"准考证号：{{考号}}","x":25,"y":72,"font":"SimHei","size":12,"color":"#000000","bold":false,"italic":false,"underline":false,"align":"left","visible":true},{"id":7,"type":"text","text":"考场座位：{{考场}} - {{座位号}}","x":25,"y":84,"font":"SimHei","size":12,"color":"#000000","bold":false,"italic":false,"underline":false,"align":"left","visible":true}],"data":{"headers":["姓名","性别","考号","考场","座位号","照片"],"rows":[["李明","男","2026001","第一考场","01号","李明"],["王悦","女","2026002","第一考场","02号","王悦"]]},"activeIds":[],"editingId":null,"scale":1,"panX":0,"panY":0,"curIdx":0}
   },
   {
     name: "邀请函",
     bgPath: "bg/15.jpg",
-    state: {"w":210,"h":148,"bg":"bg/15.jpg","elements":[{"id":1,"type":"text","text":"尊敬的 {{嘉宾姓名}} {{称呼}}：","x":30,"y":45,"font":"KaiTi","size":22,"color":"#b8860b","bold":true,"italic":false,"underline":false,"align":"left","visible":true},{"id":2,"type":"text","text":"    诚挚邀请您参加即将举办的璃月港幼儿园大班级毕业晚会，\n期待您的光临！","x":30,"y":75,"font":"KaiTi","size":16,"color":"#333333","bold":false,"italic":false,"underline":false,"align":"left","lineHeight":1.8,"visible":true},{"id":3,"type":"text","text":"时 间：{{时间}}","x":30,"y":105,"font":"SimHei","size":12,"color":"#555555","bold":false,"italic":false,"underline":false,"align":"left","visible":true},{"id":4,"type":"text","text":"地 点：{{地点}}","x":30,"y":120,"font":"SimHei","size":12,"color":"#555555","bold":false,"italic":false,"underline":false,"align":"left","visible":true}],"data":{"headers":["嘉宾姓名","称呼","时间","地点"],"rows":[["钟离","先生","2026年12月31日 18:00","璃月港幼儿园"],["凝光","女士","2026年12月31日 18:00","璃月港·群玉阁"]]},"activeIds":[],"editingId":null,"scale":1,"panX":0,"panY":0,"curIdx":0}
+    state: {"w":210,"h":148,"bg":"bg/15.jpg","elements":[{"id":1,"type":"text","text":"尊敬的 {{嘉宾姓名}} {{称呼}}：","x":30,"y":45,"font":"KaiTi","size":22,"color":"#b8860b","bold":true,"italic":false,"underline":false,"align":"left","visible":true},{"id":2,"type":"text","text":"    诚挚邀请您参加即将举办的阳光幼儿园大班级毕业晚会，\n期待您的光临！","x":30,"y":75,"font":"KaiTi","size":16,"color":"#333333","bold":false,"italic":false,"underline":false,"align":"left","lineHeight":1.8,"visible":true},{"id":3,"type":"text","text":"时 间：{{时间}}","x":30,"y":105,"font":"SimHei","size":12,"color":"#555555","bold":false,"italic":false,"underline":false,"align":"left","visible":true},{"id":4,"type":"text","text":"地 点：{{地点}}","x":30,"y":120,"font":"SimHei","size":12,"color":"#555555","bold":false,"italic":false,"underline":false,"align":"left","visible":true}],"data":{"headers":["嘉宾姓名","称呼","时间","地点"],"rows":[["赵建国","先生","2026年12月31日 18:00","阳光幼儿园"],["孙丽","女士","2026年12月31日 18:00","阳光大礼堂"]]},"activeIds":[],"editingId":null,"scale":1,"panX":0,"panY":0,"curIdx":0}
   }
 ];
 
@@ -662,12 +667,17 @@ const app = {
   lastClickTime: 0,
   images: {},
   customBgs: [],
+  customTemplates: {},
   clipboard: null,
   state: JSON.parse(JSON.stringify(TEMPLATES[0].state)),
   history: [],
   
   pointers: [],
   prevPinchDist: 0,
+
+  escapeHTML(str) {
+    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+  },
 
   async init() {
     try {
@@ -708,10 +718,17 @@ const app = {
         this.customBgs = [];
       }
 
+      try {
+        this.customTemplates = JSON.parse(localStorage.getItem('QPrint_Custom_Tpls') || '{}');
+      } catch(e) {
+        this.customTemplates = {};
+      }
+
       this.loadFromLocal();
       
       if (!this.state.data || !this.state.data.headers) {
-        this.state = JSON.parse(JSON.stringify(TEMPLATES[0].state));
+        this.state = JSON.parse(JSON.stringify(this.customTemplates[0] || TEMPLATES[0].state));
+        this.state.tplIdx = 0;
       }
 
       this.renderTemplateGrid();
@@ -773,6 +790,7 @@ const app = {
   async clearCache() {
     if (!confirm('警告：此操作将清除所有数据并恢复出厂状态。确定继续吗？')) return;
     localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem('QPrint_Custom_Tpls');
     try {
       if (ImageDB.db) ImageDB.db.close();
       indexedDB.deleteDatabase('QPrintImageDB_v2');
@@ -937,15 +955,22 @@ const app = {
     const grid = document.getElementById('tplGrid');
     if (!grid) return;
     grid.innerHTML = TEMPLATES.map((tpl, i) => {
-      const urls = this.getResourceUrls(tpl.bgPath);
-      return '<div class="tpl-wrap" onclick="app.loadTemplate(' + i + ')"><img class="tpl-card" src="' + urls[0] + '" onerror="window.appFallback(this, \'' + tpl.bgPath + '\')"><div class="tpl-name" title="' + tpl.name + '">' + tpl.name + '</div></div>';
+      const customState = this.customTemplates[i];
+      const bgPath = customState ? customState.bg : tpl.bgPath;
+      const urls = this.getResourceUrls(bgPath);
+      const restoreBtn = customState ? '<button class="tpl-restore" onclick="event.stopPropagation(); app.restoreTemplate(' + i + ')" title="恢复默认模板">↺</button>' : '';
+      return '<div class="tpl-wrap" onclick="app.loadTemplate(' + i + ')">' +
+               '<img class="tpl-card" src="' + urls[0] + '" onerror="window.appFallback(this, \'' + bgPath + '\')">' +
+               restoreBtn +
+               '<div class="tpl-name" title="' + tpl.name + '">' + tpl.name + '</div>' +
+             '</div>';
     }).join('');
   },
 
-  loadTemplate(index) {
-    if (!confirm('切换模板将覆盖当前的排版设计，确定载入吗？')) return;
-    const tpl = TEMPLATES[index];
-    const newState = JSON.parse(JSON.stringify(tpl.state));
+  loadTemplate(index, force = false) {
+    if (!force && !confirm('切换模板将覆盖当前的排版设计，确定载入吗？')) return;
+    const tpl = this.customTemplates[index] || TEMPLATES[index].state;
+    const newState = JSON.parse(JSON.stringify(tpl));
     
     this.state.w = newState.w;
     this.state.h = newState.h;
@@ -955,6 +980,7 @@ const app = {
     this.state.curIdx = 0;
     this.state.activeIds = [];
     this.state.editingId = null;
+    this.state.tplIdx = index;
     this.history = [];
 
     this.updateBg();
@@ -965,12 +991,25 @@ const app = {
     
     const layoutModeSelect = document.getElementById('printLayoutMode');
     if (layoutModeSelect) {
-      layoutModeSelect.value = (tpl.name === "桌面水牌" || tpl.name.includes("参会代表证") || tpl.name.includes("准考证")) ? 'grid' : 'single';
+      const name = TEMPLATES[index].name;
+      layoutModeSelect.value = (name === "桌面水牌" || name.includes("参会代表证") || name.includes("参观证书") || name.includes("准考证")) ? 'grid' : 'single';
       this.onPrintLayoutModeChange();
     }
 
-    this.showToast('已载入模板：' + tpl.name);
+    if (!force) this.showToast('已载入模板：' + TEMPLATES[index].name);
     this.closeSidebars();
+  },
+
+  restoreTemplate(index) {
+    if (!confirm('确定要恢复该模板到默认状态吗？你的修改将丢失。')) return;
+    delete this.customTemplates[index];
+    localStorage.setItem('QPrint_Custom_Tpls', JSON.stringify(this.customTemplates));
+    if (this.state.tplIdx === index) {
+      this.loadTemplate(index, true);
+    } else {
+      this.renderTemplateGrid();
+    }
+    this.showToast('已恢复默认模板');
   },
 
   setupDropZone() {
@@ -1039,7 +1078,7 @@ const app = {
     const keys = Object.keys(this.images);
     if (countEl) countEl.innerText = keys.length;
     if (!keys.length) { grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:24px;color:#999;font-size:12px;">库空空如也，请先添加媒体</div>'; return; }
-    grid.innerHTML = keys.map(name => '<div class="img-item" title="' + name + '"><img src="' + this.images[name] + '"><span class="img-name">' + name.replace(/</g, '&lt;') + '</span><button class="img-del" onclick="app.deleteImage(\'' + name.replace(/'/g, "\\'") + '\')">&times;</button></div>').join('');
+    grid.innerHTML = keys.map(name => '<div class="img-item" title="' + app.escapeHTML(name) + '"><img src="' + this.images[name] + '"><span class="img-name">' + app.escapeHTML(name) + '</span><button class="img-del" onclick="app.deleteImage(\'' + name.replace(/\\/g, "\\\\").replace(/'/g, "\\'").replace(/"/g, '&quot;') + '\')">&times;</button></div>').join('');
   },
 
   renderMatchStatus() {
@@ -1070,7 +1109,7 @@ const app = {
     let html = reports.map(r => {
       const missShort = r.misses.length ? '，缺: ' + r.misses.slice(0, 3).join('、') + (r.misses.length > 3 ? '...' : '') : '';
       const missFull = r.misses.length ? '未配对数据 (' + r.misses.length + '项):\n' + r.misses.join('\n') : '匹配完整';
-      return '<div title="' + missFull.replace(/"/g, '&quot;') + '" style="' + (r.misses.length ? 'cursor:help;' : '') + '">「' + r.name + '」成功配对 ' + r.matched + '/' + r.total + missShort + '</div>';
+      return '<div title="' + app.escapeHTML(missFull) + '" style="' + (r.misses.length ? 'cursor:help;' : '') + '">「' + app.escapeHTML(r.name) + '」成功配对 ' + r.matched + '/' + r.total + app.escapeHTML(missShort) + '</div>';
     }).join('<div style="height:4px"></div>');
     
     box.className = 'match-status ' + (allOk ? 'ok' : 'warn');
@@ -1136,7 +1175,10 @@ const app = {
     
     if (isEditing) {
       div.contentEditable = true; div.innerText = el.text;
-      div.onblur = () => { el.text = div.innerText; this.state.editingId = null; this.refreshAll(); this.recordState(); };
+      div.onblur = () => { 
+        el.text = div.innerText.trim() || '双击修改文本'; 
+        this.state.editingId = null; this.refreshAll(); this.recordState(); 
+      };
       div.onpointerdown = e => e.stopPropagation();
     } else {
       let txt = el.text;
@@ -1164,7 +1206,7 @@ const app = {
     if (imgUrl) {
       const img = document.createElement('img'); img.src = imgUrl; img.draggable = false; img.style.objectFit = el.imgFit || 'cover'; div.appendChild(img);
     } else {
-      div.innerHTML = '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;border:2px dashed #cbd5e1;border-radius:4px;color:#94a3b8;font-size:11px;text-align:center;flex-direction:column;gap:4px;"><span style="font-size:22px;">🖼️</span><span>{{' + (el.imgVar || '?') + '}}</span></div>';
+      div.innerHTML = '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;border:2px dashed #cbd5e1;border-radius:4px;color:#94a3b8;font-size:11px;text-align:center;flex-direction:column;gap:4px;"><span style="font-size:22px;">🖼️</span><span>{{' + app.escapeHTML(el.imgVar || '?') + '}}</span></div>';
     }
     
     div.onpointerdown = e => this.elMouseDown(e, el);
@@ -1216,11 +1258,15 @@ const app = {
     };
 
     const up = () => { 
-      window.removeEventListener('pointermove', move); window.removeEventListener('pointerup', up);
+      window.removeEventListener('pointermove', move); 
+      window.removeEventListener('pointerup', up);
+      window.removeEventListener('pointercancel', up);
       try { targetEl.releasePointerCapture(e.pointerId); } catch(err) {}
       if (moved) this.recordState(); else if (!e.ctrlKey && this.state.activeIds.length > 1) { this.state.activeIds = [el.id]; this.refreshAll(); }
     };
-    window.addEventListener('pointermove', move); window.addEventListener('pointerup', up);
+    window.addEventListener('pointermove', move); 
+    window.addEventListener('pointerup', up);
+    window.addEventListener('pointercancel', up);
   },
 
   startResize(e, el) {
@@ -1245,8 +1291,11 @@ const app = {
       const propSize = document.getElementById('propSize'); if (propSize) propSize.value = Math.round(el.size);
     };
 
-    const up = () => { window.removeEventListener('pointermove', move); window.removeEventListener('pointerup', up); try { targetEl.releasePointerCapture(e.pointerId); } catch(err) {} this.recordState(); };
-    window.addEventListener('pointermove', move); window.addEventListener('pointerup', up);
+    const up = () => { 
+      window.removeEventListener('pointermove', move); window.removeEventListener('pointerup', up); window.removeEventListener('pointercancel', up); 
+      try { targetEl.releasePointerCapture(e.pointerId); } catch(err) {} this.recordState(); 
+    };
+    window.addEventListener('pointermove', move); window.addEventListener('pointerup', up); window.addEventListener('pointercancel', up);
   },
 
   startResizeImg(e, el) {
@@ -1266,8 +1315,11 @@ const app = {
       if (propW) propW.value = Math.round(el.imgW); if (propH) propH.value = Math.round(el.imgH);
     };
 
-    const up = () => { window.removeEventListener('pointermove', move); window.removeEventListener('pointerup', up); try { targetEl.releasePointerCapture(e.pointerId); } catch(err) {} this.recordState(); };
-    window.addEventListener('pointermove', move); window.addEventListener('pointerup', up);
+    const up = () => { 
+      window.removeEventListener('pointermove', move); window.removeEventListener('pointerup', up); window.removeEventListener('pointercancel', up);
+      try { targetEl.releasePointerCapture(e.pointerId); } catch(err) {} this.recordState(); 
+    };
+    window.addEventListener('pointermove', move); window.addEventListener('pointerup', up); window.addEventListener('pointercancel', up);
   },
 
   updateActive() {
@@ -1302,12 +1354,12 @@ const app = {
     if (!hint) return;
     const hIdx = this.state.data.headers.indexOf(el.imgVar);
     const rowData = this.state.data.rows[this.state.curIdx] || [];
-    const colName = el.imgVar.replace(/</g,'&lt;');
+    const colName = app.escapeHTML(el.imgVar);
     
     hint.style.padding = '8px 10px'; hint.style.background = '#f8fafc'; hint.style.borderRadius = '8px'; hint.style.border = '1px solid #e2e8f0';
 
     if (hIdx >= 0) {
-      const curVal = String(rowData[hIdx] || '').trim().replace(/</g,'&lt;');
+      const curVal = app.escapeHTML(String(rowData[hIdx] || '').trim());
       const found = this.resolveImageUrl(el.imgVar, rowData);
       hint.innerHTML = '<span style="color:#64748b">数据列映射：</span><b>' + colName + '</b> ➡️ <b>' + (curVal || '未填') + '</b><div style="margin-top:6px;font-weight:700;">' + (found ? '<span style="color:#15803d">✅ 解析正常</span>' : '<span style="color:#ef4444">⚠️ 未找目标文件</span>') + '</div>';
     } else if (el.imgVar && (el.imgVar.startsWith('http://') || el.imgVar.startsWith('https://'))) {
@@ -1335,7 +1387,7 @@ const app = {
     if (el.type === 'image') {
       textProps.style.display = 'none'; textStyleProps.style.display = 'none'; imageProps.style.display = 'block';
       const sel = document.getElementById('propImgVar');
-      sel.innerHTML = ['<option value="">-- 选择数据列 --</option>'].concat(this.state.data.headers.map(h => '<option value="' + h.replace(/"/g, '&quot;') + '">' + h.replace(/</g, '&lt;') + '</option>')).join('');
+      sel.innerHTML = ['<option value="">-- 选择数据列 --</option>'].concat(this.state.data.headers.map(h => '<option value="' + app.escapeHTML(h) + '">' + app.escapeHTML(h) + '</option>')).join('');
       if (this.state.data.headers.includes(el.imgVar)) { sel.value = el.imgVar; document.getElementById('propImgVarText').value = ''; }
       else { sel.value = ''; document.getElementById('propImgVarText').value = el.imgVar || ''; }
       document.getElementById('propImgW').value = Math.round(el.imgW || 30); document.getElementById('propImgH').value = Math.round(el.imgH || 40); document.getElementById('propImgFit').value = el.imgFit || 'cover';
@@ -1345,7 +1397,7 @@ const app = {
       if (this.dom.propText) this.dom.propText.value = el.text;
       document.getElementById('propFont').value = el.font; document.getElementById('propSize').value = Math.round(el.size); document.getElementById('propColor').value = el.color; document.getElementById('colorPreview').style.background = el.color; document.getElementById('colorHex').value = el.color.toUpperCase(); document.getElementById('propLetterSpacing').value = el.letterSpacing || 0; document.getElementById('propLineHeight').value = el.lineHeight || 1.4;
       const varCont = document.getElementById('varContainer');
-      if (varCont) varCont.innerHTML = this.state.data.headers.map(h => '<div style="background:#f1f5f9;border:1px solid #ddd;padding:4px 10px;border-radius:20px;font-size:11px;cursor:pointer" onclick="app.insertVar(\'' + h.replace(/'/g, "\\'") + '\')">' + h.replace(/</g, '&lt;') + '</div>').join('');
+      if (varCont) varCont.innerHTML = this.state.data.headers.map(h => '<div style="background:#f1f5f9;border:1px solid #ddd;padding:4px 10px;border-radius:20px;font-size:11px;cursor:pointer" onclick="app.insertVar(\'' + h.replace(/\\/g, "\\\\").replace(/'/g, "\\'").replace(/"/g, '&quot;') + '\')">' + app.escapeHTML(h) + '</div>').join('');
       document.getElementById('italicBtn').style.background = el.italic ? 'var(--accent-soft)' : '';
       document.getElementById('underlineBtn').style.background = el.underline ? 'var(--accent-soft)' : '';
     }
@@ -1482,7 +1534,7 @@ const app = {
           } else {
             let txt = el.text;
             this.state.data.headers.forEach((hh, idx) => { txt = txt.split('{{' + hh + '}}').join(row[idx] || ''); });
-            let safeTxt = txt.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            let safeTxt = app.escapeHTML(txt);
             const off = el.align === 'center' ? -50 : (el.align === 'right' ? -100 : 0);
             const l = (el.x / w * 100).toFixed(4) + '%', t = (el.y / h * 100).toFixed(4) + '%', ls = el.letterSpacing || 0, lh = el.lineHeight || 1.4;
             html += `<div class="print-el" style="top:${t};left:${l};font-family:'${el.font}';font-size:${el.size}pt;color:${el.color};font-weight:${el.bold ? 'bold' : 'normal'};font-style:${el.italic ? 'italic' : 'normal'};text-decoration:${el.underline ? 'underline' : 'none'};letter-spacing:${ls}px;line-height:${lh};transform:translate(${off}%,-50%);text-align:${el.align};">${safeTxt}</div>`;
@@ -1546,7 +1598,7 @@ const app = {
               } else {
                 let txt = el.text;
                 this.state.data.headers.forEach((hh, idx) => { txt = txt.split('{{' + hh + '}}').join(row[idx] || ''); });
-                let safeTxt = txt.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                let safeTxt = app.escapeHTML(txt);
                 const off = el.align === 'center' ? -50 : (el.align === 'right' ? -100 : 0);
                 const l = (el.x / designW * 100).toFixed(4) + '%', t = (el.y / designH * 100).toFixed(4) + '%', ls = el.letterSpacing || 0, lh = el.lineHeight || 1.4;
                 html += `<div class="print-el" style="top:${t};left:${l};font-family:'${el.font}';font-size:${el.size}pt;color:${el.color};font-weight:${el.bold ? 'bold' : 'normal'};font-style:${el.italic ? 'italic' : 'normal'};text-decoration:${el.underline ? 'underline' : 'none'};letter-spacing:${ls}px;line-height:${lh};transform:translate(${off}%,-50%);text-align:${el.align};">${safeTxt}</div>`;
@@ -1698,17 +1750,28 @@ const app = {
   uploadBg(i) {
     const f = i.files[0]; if (!f) return;
     const r = new FileReader();
-    r.onload = async e => {
-      const dataUrl = e.target.result; await ImageDB.putBg('bg_' + Date.now(), dataUrl);
-      this.customBgs.unshift(dataUrl); if (this.customBgs.length > 20) this.customBgs.pop();
-      this.state.bg = dataUrl; this.updateBg(); this.renderBgGrid(); this.recordState();
+    r.onload = e => {
+      const img = new Image();
+      img.onload = async () => {
+        const cvs = document.createElement('canvas');
+        let w = img.width, h = img.height, max = 1600;
+        if (w > max || h > max) { if (w > h) { h = Math.round(h * max / w); w = max; } else { w = Math.round(w * max / h); h = max; } }
+        cvs.width = w; cvs.height = h;
+        cvs.getContext('2d').drawImage(img, 0, 0, w, h);
+        const dataUrl = cvs.toDataURL('image/jpeg', 0.85);
+        
+        await ImageDB.putBg('bg_' + Date.now(), dataUrl);
+        this.customBgs.unshift(dataUrl); if (this.customBgs.length > 20) this.customBgs.pop();
+        this.state.bg = dataUrl; this.updateBg(); this.renderBgGrid(); this.recordState();
+      };
+      img.src = e.target.result;
     };
     r.readAsDataURL(f); i.value = '';
   },
 
   renderLayerList() {
     document.getElementById('layerList').innerHTML = this.state.elements.slice().reverse().map(el => {
-      const label = el.type === 'image' ? '🖼️ [图片] {{' + (el.imgVar || '') + '}}' : String(el.text).replace(/</g, '&lt;').substring(0, 30);
+      const label = el.type === 'image' ? '🖼️ [图片] {{' + app.escapeHTML(el.imgVar || '') + '}}' : app.escapeHTML(String(el.text).substring(0, 30));
       const bg = this.state.activeIds.includes(el.id) ? '#f0f7ff' : '';
       return '<div style="padding:12px;border-bottom:1px solid #f1f5f9;display:flex;justify-content:space-between;align-items:center;cursor:pointer;background:' + bg + '" onclick="app.selectLayer(' + el.id + ')" oncontextmenu="app.showMenu(event,' + el.id + ')"><span style="font-size:12px;font-weight:600;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;width:180px">' + label + '</span><span style="cursor:pointer" onclick="event.stopPropagation();app.toggleVisible(' + el.id + ')">' + (el.visible ? '👁️' : '🚫') + '</span></div>';
     }).join('');
@@ -1772,11 +1835,11 @@ const app = {
 
   renderSheet() {
     let html = '<thead><tr><th>序号</th>';
-    this.state.data.headers.forEach((h, i) => { html += '<th>' + h.replace(/</g, '&lt;') + '<button class="col-del-btn" onclick="app.delCol(' + i + ')"><svg viewBox="0 0 24 24" width="10" height="10"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button></th>'; });
+    this.state.data.headers.forEach((h, i) => { html += '<th>' + app.escapeHTML(h) + '<button class="col-del-btn" onclick="app.delCol(' + i + ')"><svg viewBox="0 0 24 24" width="10" height="10"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button></th>'; });
     html += '<th></th></tr></thead><tbody>';
     this.state.data.rows.forEach((row, idx) => {
       html += '<tr class="' + (idx === this.state.curIdx ? 'selected' : '') + '" onclick="app.setCurRow(' + idx + ')"><td>' + (idx + 1) + '</td>';
-      row.forEach((c, cidx) => { html += '<td contenteditable="true" onkeydown="if(event.key===\'Enter\'){event.preventDefault();this.blur();}" onblur="app.updateCellDirect(this,' + idx + ',' + cidx + ')">' + String(c).replace(/</g, '&lt;') + '</td>'; });
+      row.forEach((c, cidx) => { html += '<td contenteditable="true" onkeydown="if(event.key===\'Enter\'){event.preventDefault();this.blur();}" onblur="app.updateCellDirect(this,' + idx + ',' + cidx + ')">' + app.escapeHTML(c) + '</td>'; });
       html += '<td><button class="close-btn" onclick="app.delRow(' + idx + ');event.stopPropagation();">\u00d7</button></td></tr>';
     });
     html += '</tbody>'; this.dom.sheetTable.innerHTML = html;
@@ -1879,12 +1942,40 @@ const app = {
     const snap = this.snapshotString();
     if (this.history.length && this.history[this.history.length - 1] === snap) return;
     this.history.push(snap); if (this.history.length > 30) this.history.shift();
-    try { localStorage.setItem(STORAGE_KEY, snap); } catch(e) { if(e.name === 'QuotaExceededError' || e.code === 22) this.showToast('存储空间已满'); }
+    try { 
+      localStorage.setItem(STORAGE_KEY, snap); 
+      // 若已有模板被激活且产生了实质编辑（历史大于1），则自动覆盖存入对应下标的自定义模板中
+      if (this.state.tplIdx !== undefined && this.history.length > 1) {
+        const isNewCustom = !this.customTemplates[this.state.tplIdx];
+        const oldBg = this.customTemplates[this.state.tplIdx] ? this.customTemplates[this.state.tplIdx].bg : null;
+        this.customTemplates[this.state.tplIdx] = JSON.parse(snap);
+        localStorage.setItem('QPrint_Custom_Tpls', JSON.stringify(this.customTemplates));
+        // 如果是该模板第一次被篡改，或背景更换导致预览图需刷新，则渲染左侧网格以产生“恢复”按钮
+        if (isNewCustom || oldBg !== this.state.bg) {
+          this.renderTemplateGrid();
+        }
+      }
+    } catch(e) { 
+      if(e.name === 'QuotaExceededError' || e.code === 22) this.showToast('存储空间已满'); 
+    }
   },
 
   undo() {
     if (this.history.length > 1) {
-      this.history.pop(); this.state = JSON.parse(this.history[this.history.length - 1]);
+      this.history.pop(); 
+      const snap = this.history[this.history.length - 1];
+      this.state = JSON.parse(snap);
+      
+      // 同步撤销动作到本地缓存和自动保存的模板中
+      try { 
+        localStorage.setItem(STORAGE_KEY, snap); 
+        if (this.state.tplIdx !== undefined) {
+          this.customTemplates[this.state.tplIdx] = JSON.parse(snap); // 修复点：深度拷贝
+          localStorage.setItem('QPrint_Custom_Tpls', JSON.stringify(this.customTemplates));
+          this.renderTemplateGrid(); 
+        }
+      } catch(e) {}
+
       this.updateBg(); this.renderBgGrid(); this.syncPaperUI(); this.centerCanvas(); this.refreshAll();
       this.showToast('撤销成功');
     } else this.showToast('没有更多历史记录');
@@ -1893,7 +1984,7 @@ const app = {
   saveProject() {
     const d = new Date(), pad = n => (n < 10 ? '0' + n : n);
     const timeStr = '' + d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate()) + pad(d.getHours()) + pad(d.getMinutes());
-    const blob = new Blob([JSON.stringify({ version: "1.0.2", app: "QPrint", timestamp: Date.now(), state: this.state, images: this.images })], { type: 'application/json;charset=utf-8' });
+    const blob = new Blob([JSON.stringify({ version: "1.0.3", app: "QPrint", timestamp: Date.now(), state: this.state, images: this.images })], { type: 'application/json;charset=utf-8' });
     const url = URL.createObjectURL(blob), a = document.createElement('a');
     a.href = url; a.download = 'QPrint_' + timeStr + '.json'; document.body.appendChild(a); a.click(); document.body.removeChild(a); setTimeout(() => URL.revokeObjectURL(url), 1000);
   },
@@ -1905,6 +1996,8 @@ const app = {
       try {
         const obj = JSON.parse(e.target.result);
         this.state = obj.state ? obj.state : obj;
+        delete this.state.tplIdx; // 修复点：删除导入项目的模板关联索引，防止篡改本地同索引模板
+
         if (!this.state.elements) this.state.elements = [];
         if (!this.state.data) this.state.data = { headers: ['姓名'], rows: [['']] };
         if (!this.state.data.headers) this.state.data.headers = ['姓名'];
