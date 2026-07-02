@@ -1446,7 +1446,7 @@ const app = {
 
     const layoutMode = document.getElementById('printLayoutMode').value;
     const rawBgUrl = this.getPrintBgUrl();
-    const bgUrl = getBlobUrl(rawBgUrl); 
+    const bgUrl = rawBgUrl;
     const dataRows = this.state.data.rows;
     
     let html = '';
